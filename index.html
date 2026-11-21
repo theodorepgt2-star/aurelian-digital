@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aurelian Digital — Ιστοσελίδες με χαρακτήρα</title>
+  <meta name="description" content="Ιστοσελίδες για ελεύθερους επαγγελματίες και εστιατόρια που θέλουν να ξεχωρίζουν." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="site-header" id="top">
+    <a class="logo" href="#top" aria-label="Aurelian Digital">Aurelian<span> Digital</span></a>
+    <nav class="nav" aria-label="Κύριο μενού">
+      <a href="#services" data-i18n="nav.services">Υπηρεσίες</a>
+      <a href="#work" data-i18n="nav.work">Έργο</a>
+      <a href="#why" data-i18n="nav.why">Γιατί εμείς</a>
+      <a href="#contact" data-i18n="nav.contact">Επικοινωνία</a>
+    </nav>
+    <button class="lang-toggle" id="langToggle" type="button" aria-label="Αλλαγή γλώσσας">EN</button>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__inner">
+        <p class="eyebrow" data-i18n="hero.eyebrow">Ψηφιακή παρουσία</p>
+        <h1 id="hero-title" class="hero__title" data-split>
+          <span data-i18n="hero.title">Ψηφιακή παρουσία με χαρακτήρα.</span>
+        </h1>
+        <p class="hero__sub" data-i18n="hero.sub">Ιστοσελίδες για ελεύθερους επαγγελματίες και εστιατόρια που θέλουν να ξεχωρίζουν και να κερδίζουν πελάτες.</p>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#contact" data-i18n="hero.cta1">Ζητήστε προσφορά</a>
+          <a class="btn btn--ghost" href="#services" data-i18n="hero.cta2">Δείτε τις υπηρεσίες</a>
+        </div>
+      </div>
+      <div class="hero__glow" aria-hidden="true"></div>
+    </section>
+
+    <!-- SERVICES (pinned horizontal) -->
+    <section class="services" id="services" aria-labelledby="services-title">
+      <div class="services__pin">
+        <div class="services__head">
+          <p class="eyebrow" data-i18n="services.eyebrow">Υπηρεσίες</p>
+          <h2 id="services-title" class="section-title" data-i18n="services.title">Ό,τι χρειάζεστε για να βρεθείτε online.</h2>
+        </div>
+        <div class="services__track" id="servicesTrack">
+
+          <article class="card">
+            <span class="card__num">01</span>
+            <h3 data-i18n="s1.title">Ιστοσελίδα για ελεύθερους επαγγελματίες</h3>
+            <p data-i18n="s1.text">Μία σελίδα που παρουσιάζει τις υπηρεσίες σας, το portfolio και τη φόρμα επικοινωνίας, ώστε οι πελάτες να σας βρίσκουν και να σας γράφουν εύκολα.</p>
+          </article>
+
+          <article class="card card--work">
+            <span class="card__num">02</span>
+            <h3 data-i18n="s2.title">Πρόσφατο έργο</h3>
+            <p class="card__example" data-i18n="s2.text">Olga's Nails: ιστοσελίδα για σαλόνι με υπηρεσίες, τιμές και φόρμα ραντεβού.</p>
+            <a class="btn btn--ghost btn--small" href="https://olgasnailsss.aureliandigital.workers.dev" target="_blank" rel="noopener noreferrer" data-i18n="s2.link">Δείτε το έργο</a>
+          </article>
+
+          <article class="card">
+            <span class="card__num">03</span>
+            <h3 data-i18n="s3.title">Κράτηση και ραντεβού online</h3>
+            <p data-i18n="s3.text">Σύστημα αιτημάτων και ραντεβού που συνδέεται με το email σας και αποθηκεύεται με ασφάλεια.</p>
+          </article>
+
+          <article class="card">
+            <span class="card__num">04</span>
+            <h3 data-i18n="s4.title">Συντήρηση και ενημερώσεις</h3>
+            <p data-i18n="s4.text">Αλλαγές μενού, νέες υπηρεσίες, φωτογραφίες και βελτιστοποίηση για αναζήτηση στο Google.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY -->
+    <section class="why" id="why" aria-labelledby="why-title">
+      <h2 id="why-title" class="section-title" data-i18n="why.title">Γιατί Aurelian Digital</h2>
+      <ul class="why__list">
+        <li class="why__item">
+          <h3 data-i18n="why.1.title">Σχεδιασμός με εμπειρία</h3>
+          <p data-i18n="why.1.text">Σχεδιάζουμε σαν να περιηγείται κανείς σε χώρο, όχι σε κατάλογο.</p>
+        </li>
+        <li class="why__item">
+          <h3 data-i18n="why.2.title">Γρήγορα σε κινητό</h3>
+          <p data-i18n="why.2.text">Ελαφριές σελίδες που φορτώνουν άμεσα, ακόμα και με αργή σύνδεση.</p>
+        </li>
+        <li class="why__item">
+          <h3 data-i18n="why.3.title">Από την αρχή ως το τέλος</h3>
+          <p data-i18n="why.3.text">Εμείς αναλαμβάνουμε τη ρύθμιση, το περιεχόμενο και την παράδοση.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <div class="contact__intro">
+        <h2 id="contact-title" class="section-title" data-i18n="contact.title">Πείτε μας για το έργο σας.</h2>
+        <p data-i18n="contact.sub">Θα σας απαντήσουμε εντός 24 ωρών.</p>
+      </div>
+
+      <form class="form" id="contactForm" novalidate>
+        <div class="form__row">
+          <label><span data-i18n="form.name">Όνομα</span>
+            <input name="name" type="text" required maxlength="120" autocomplete="name" />
+          </label>
+          <label><span data-i18n="form.email">Email</span>
+            <input name="email" type="email" required maxlength="200" autocomplete="email" />
+          </label>
+        </div>
+        <div class="form__row">
+          <label><span data-i18n="form.phone">Τηλέφωνο</span>
+            <input name="phone" type="tel" maxlength="40" autocomplete="tel" />
+          </label>
+          <label><span data-i18n="form.type">Είδος έργου</span>
+            <select name="project_type" required>
+              <option value="freelancer" data-i18n="form.type.freelancer">Ελεύθερος επαγγελματίας</option>
+              <option value="restaurant" data-i18n="form.type.restaurant">Εστιατόριο</option>
+              <option value="other" data-i18n="form.type.other">Άλλο</option>
+            </select>
+          </label>
+        </div>
+        <label class="form__full"><span data-i18n="form.message">Μήνυμα</span>
+          <textarea name="message" rows="5" required maxlength="2000"></textarea>
+        </label>
+        <!-- honeypot against bots -->
+        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button class="btn btn--primary" type="submit" data-i18n="form.submit">Αποστολή αιτήματος</button>
+        <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__brand">Aurelian Digital</p>
+    <p data-i18n="footer.tag">Ιστοσελίδες με χαρακτήρα</p>
+    <a href="mailto:theodorepgt2@gmail.com">theodorepgt2@gmail.com</a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script src="config.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
