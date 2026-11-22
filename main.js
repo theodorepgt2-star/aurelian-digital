@@ -549,9 +549,9 @@
     if (!reduceMotion()) {
       gsap.fromTo(status,
         { y: isError ? 0 : 8, opacity: 0, x: 0 },
-        { y: 0, opacity: 1, duration: 0.5, ease: EASE }
+        { y: 0, opacity: 1, duration: 0.3, ease: EASE }
       );
-      if (isError) gsap.fromTo(form, { x: -8 }, { x: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+      if (isError) gsap.fromTo(form, { x: -8 }, { x: 0, duration: 0.3, ease: "power2.out" });
     }
   }
 
