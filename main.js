@@ -434,7 +434,8 @@
   });
 
   /* ---------- Section-by-section scrolling (desktop: wheel and arrow keys) ---------- */
-  const SECTION_SELECTOR = "main > section, footer.footer";
+  // A pinned section is wrapped in a .pin-spacer, so it is matched through that wrapper
+  const SECTION_SELECTOR = "main > section, main > .pin-spacer, footer.footer";
   const lightboxEl = document.getElementById("lightbox");
   const maxScrollY = () => document.documentElement.scrollHeight - window.innerHeight;
   const clampY = (y) => Math.min(Math.max(y, 0), maxScrollY());
