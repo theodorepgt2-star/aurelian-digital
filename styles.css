@@ -7,6 +7,7 @@
   --jade: #5fe6a0;
   --bone: #eafff2;
   --lilac: #c79bff;
+  --error: #c79bff;
   --sky: #aee9ff;
   --muted: rgba(234, 255, 242, 0.84);
   --line: rgba(174, 246, 207, 0.18);
@@ -310,8 +311,8 @@ a { color: inherit; }
 }
 .card--work::before { background: radial-gradient(420px circle at var(--mx) var(--my), rgba(199, 155, 255, 0.3), transparent 60%); }
 .card--work .card__example { color: var(--muted); }
-.card--work .btn--ghost { border-color: var(--lilac); color: var(--lilac); }
-.card--work .btn--ghost:hover { background: var(--lilac); color: var(--space); }
+.card--work .btn--ghost { border-color: var(--jade); color: var(--jade); }
+.card--work .btn--ghost:hover { background: var(--jade); color: var(--space); }
 
 .card__icon {
   width: 52px; height: 52px;
@@ -320,7 +321,7 @@ a { color: inherit; }
   border-radius: 14px;
   background: rgba(174, 246, 207, 0.1);
 }
-.card--work .card__icon { color: var(--lilac); background: rgba(199, 155, 255, 0.14); }
+.card--work .card__icon { color: var(--jade); background: rgba(95, 230, 160, 0.14); }
 .card__icon svg { width: 30px; height: 30px; }
 .card__num {
   font-family: var(--serif);
@@ -449,7 +450,7 @@ a { color: inherit; }
 }
 .why__item:hover::before { width: 64px; }
 .why__n {
-  font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--lilac);
+  font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--jade);
   display: block; margin-bottom: 0.8rem;
 }
 .why__item h3 {
@@ -483,7 +484,7 @@ a { color: inherit; }
   transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
 }
 .form select option { color: var(--space); }
-.form [aria-invalid="true"] { border-color: var(--lilac); box-shadow: 0 0 0 4px rgba(199, 155, 255, 0.18); }
+.form [aria-invalid="true"] { border-color: var(--error); box-shadow: 0 0 0 4px rgba(199, 155, 255, 0.18); }
 .form input:focus, .form select:focus, .form textarea:focus {
   outline: none;
   border-color: var(--jade);
@@ -491,13 +492,13 @@ a { color: inherit; }
   box-shadow: 0 0 0 4px rgba(95, 230, 160, 0.18);
 }
 .form input:invalid:not(:placeholder-shown),
-.form select:invalid { border-color: var(--lilac); }
+.form select:invalid { border-color: var(--error); }
 .form textarea { resize: vertical; }
 
 .btn--submit { justify-self: start; }
 
 .form__status { margin: 0; min-height: 1.4em; color: var(--mint); }
-.form__status.is-error { color: var(--lilac); }
+.form__status.is-error { color: var(--error); }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 
 /* ===== Why/Contact section titles stay readable over stars ===== */
