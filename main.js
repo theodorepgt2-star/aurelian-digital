@@ -455,11 +455,13 @@
     return clampY(top - headerH - (room - height) / 2);
   };
 
-  let moving = false;
+  let wheelBusy = false;
   let cooldownUntil = 0;
 
-  const goToSection = (direction) => {
-    if (moving || performance.now() < cooldownUntil) return;
+  // Keys always retarget from the current position, so a press during a move is never lost.
+  // The wheel is throttled instead, because trackpad inertia sends many events in a row.
+  const goToSection = (direction, fromWheel = false) => {
+    if (fromWheel && (wheelBusy || performance.now() < cooldownUntil)) return;
 
     const sections = [...document.querySelectorAll(SECTION_SELECTOR)];
     const y = window.scrollY;
@@ -470,13 +472,14 @@
 
     if (target === undefined || Math.abs(target - y) < 2) return;
 
-    moving = true;
+    gsap.killTweensOf(window);
+    wheelBusy = true;
     gsap.to(window, {
       scrollTo: { y: target, autoKill: false },
       duration: reduceMotion() ? 0 : 1.1,
       ease: "power3.inOut",
       onComplete: () => {
-        moving = false;
+        wheelBusy = false;
         cooldownUntil = performance.now() + 700; // absorbs trackpad inertia
       },
     });
@@ -500,7 +503,7 @@
     if (e.target.closest("textarea, select, #contactForm")) return;
     if (Math.abs(e.deltaY) < 4 || pinnedCanScroll(Math.sign(e.deltaY))) return;
     e.preventDefault();
-    goToSection(Math.sign(e.deltaY));
+    goToSection(Math.sign(e.deltaY), true);
   }, { passive: false });
 
   window.addEventListener("keydown", (e) => {
