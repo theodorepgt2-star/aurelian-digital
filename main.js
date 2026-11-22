@@ -30,6 +30,17 @@
     "s3.text": "A request and appointment system linked to your email, stored securely.",
     "s4.title": "Maintenance and updates",
     "s4.text": "Menu changes, new services, photos and search engine optimisation.",
+    "work.eyebrow": "Work",
+    "work.title": "Work that speaks for itself.",
+    "work.cat.salon": "Salon",
+    "work.cat.restaurant": "Restaurant",
+    "work.cat.freelancer": "Freelancer",
+    "work.1.title": "Olga's Nails",
+    "work.1.desc": "Salon website: services, prices and a booking form.",
+    "work.soon.title": "Coming soon",
+    "work.soon.desc": "A new project is on its way.",
+    "lb.close": "Close",
+    "lb.visit": "Visit the site",
     "why.title": "Why Aurelian Digital",
     "why.1.title": "Design with experience",
     "why.1.text": "We design the way a visitor moves through a space, not like a catalogue.",
@@ -37,6 +48,7 @@
     "why.2.text": "Lightweight pages that load quickly, even on a slow connection.",
     "why.3.title": "From start to finish",
     "why.3.text": "We handle setup, content and delivery.",
+    "contact.eyebrow": "Contact",
     "contact.title": "Tell us about your project.",
     "contact.sub": "We will reply within 24 hours.",
     "form.name": "Name",
@@ -53,26 +65,44 @@
     "form.budget.unsure": "Not sure yet",
     "form.message": "Message (optional)",
     "form.submit": "Send request",
+    "footer.tag": "Websites with character",
+  };
+
+  // Greek strings for things that are not in the HTML (status messages, aria labels).
+  const EL_EXTRA = {
+    "lb.close": "Κλείσιμο",
+    "form.ok": "Σας ευχαριστούμε! Θα σας απαντήσουμε εντός 24 ωρών.",
+    "form.err": "Κάτι πήγε στραβά. Δοκιμάστε ξανά.",
+    "form.invalid": "Συμπληρώστε το όνομά σας και έναν έγκυρο αριθμό τηλεφώνου.",
+  };
+  const EN_EXTRA = {
     "form.ok": "Thank you! We will reply within 24 hours.",
     "form.err": "Something went wrong. Please try again.",
     "form.invalid": "Please enter your name and a valid phone number.",
-    "footer.tag": "Websites with character",
   };
 
   const html = document.documentElement;
   const toggle = document.getElementById("langToggle");
 
   // Keep the original Greek so we can switch back without a reload.
-  const GR = {};
+  const GR = { ...EL_EXTRA };
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     GR[el.dataset.i18n] = el.textContent;
   });
 
+  const isEN = () => html.lang === "en";
+  const dict = () => (isEN() ? { ...EN, ...EN_EXTRA } : GR);
+  const t = (key) => dict()[key] || key;
+
   function setLang(lang) {
-    const dict = lang === "en" ? EN : GR;
+    const d = lang === "en" ? { ...EN, ...EN_EXTRA } : GR;
     document.querySelectorAll("[data-i18n]").forEach((el) => {
-      const value = dict[el.dataset.i18n];
+      const value = d[el.dataset.i18n];
       if (value !== undefined) el.textContent = value;
+    });
+    document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+      const value = d[el.dataset.i18nAria];
+      if (value !== undefined) el.setAttribute("aria-label", value);
     });
     html.lang = lang === "en" ? "en" : "el";
     toggle.textContent = lang === "en" ? "ΕΛ" : "EN";
@@ -85,21 +115,20 @@
     if (window.__heroSplit) window.__heroSplit.revert();
     window.__heroSplit = null;
     setLang(next);
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) runHero();
+    if (!reduceMotion()) runHero();
   });
 
   try {
-    const saved = localStorage.getItem(LANG_KEY);
-    if (saved === "en") setLang("en");
+    if (localStorage.getItem(LANG_KEY) === "en") setLang("en");
   } catch (_) { /* ignore */ }
 
   /* ---------- Motion ---------- */
+  const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const mm = gsap.matchMedia();
   gsap.registerPlugin(ScrollTrigger, SplitText);
 
   function runHero() {
-    const title = document.querySelector("[data-split]");
-    const splitTarget = title.querySelector("span");
+    const splitTarget = document.querySelector("[data-split] span");
 
     document.fonts.ready.then(() => {
       const split = new SplitText(splitTarget, { type: "lines", linesClass: "split-line" });
@@ -110,17 +139,21 @@
         .from(".eyebrow", { y: 16, opacity: 0, duration: 0.6 }, "<")
         .from(".hero__sub", { y: 24, opacity: 0, duration: 0.7 }, "-=0.6")
         .from(".hero__cta .btn", { y: 20, opacity: 0, duration: 0.6, stagger: 0.1 }, "-=0.5")
-        .from(".hero__glow", { scale: 0.7, opacity: 0, duration: 1.6 }, 0);
+        .from(".scroll-cue", { opacity: 0, duration: 0.8 }, "-=0.3");
     });
   }
 
   mm.add("(prefers-reduced-motion: no-preference)", () => {
     runHero();
 
-    // Hero glow drifts gently with scroll.
-    gsap.to(".hero__glow", {
-      yPercent: 25,
-      ease: "none",
+    // Ambient orbs drift slowly in the hero background.
+    gsap.to(".orb--1", { x: 120, y: 80, duration: 9, ease: "sine.inOut", yoyo: true, repeat: -1 });
+    gsap.to(".orb--2", { x: -100, y: 120, duration: 11, ease: "sine.inOut", yoyo: true, repeat: -1 });
+    gsap.to(".orb--3", { x: 90, y: -70, duration: 13, ease: "sine.inOut", yoyo: true, repeat: -1 });
+
+    // Hero content drifts up and fades as you scroll past it.
+    gsap.to(".hero__inner", {
+      yPercent: -18, opacity: 0.2, ease: "none",
       scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 },
     });
 
@@ -142,12 +175,20 @@
       },
     });
 
-    // Section titles and the "why" list reveal as they enter.
+    // Section titles reveal as they enter.
     gsap.utils.toArray(".section-title").forEach((el) => {
       gsap.from(el, {
         y: 40, opacity: 0, duration: DURATION, ease: EASE,
         scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none reverse" },
       });
+    });
+
+    // Portfolio tiles and why-items rise in groups.
+    ScrollTrigger.batch(".tile", {
+      start: "top 88%",
+      onEnter: (batch) => gsap.from(batch, {
+        y: 60, opacity: 0, duration: 1, ease: EASE, stagger: 0.15, overwrite: true,
+      }),
     });
 
     ScrollTrigger.batch(".why__item", {
@@ -164,29 +205,75 @@
     });
   });
 
-  // Reduced motion: text is already visible via CSS, nothing else to do.
+  // Reduced-motion users get the static layout from CSS; nothing to animate.
   mm.add("(prefers-reduced-motion: reduce)", () => {});
 
-  // Gentle card tilt-free hover is handled in CSS; no per-frame JS.
+  /* ---------- Spotlight on cards (pointer tracking, one rAF per frame) ---------- */
+  if (window.matchMedia("(hover: hover)").matches && !reduceMotion()) {
+    document.querySelectorAll(".spot").forEach((card) => {
+      let frame = 0;
+      card.addEventListener("pointermove", (e) => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => {
+          const r = card.getBoundingClientRect();
+          card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+          card.style.setProperty("--my", `${e.clientY - r.top}px`);
+        });
+      });
+    });
+  }
+
+  /* ---------- Portfolio lightbox ---------- */
+  const lightbox = document.getElementById("lightbox");
+  const lbTitle = document.getElementById("lbTitle");
+  const lbDesc = document.getElementById("lbDesc");
+  const lbLink = document.getElementById("lbLink");
+
+  document.querySelectorAll(".tile").forEach((tile) => {
+    tile.addEventListener("click", () => {
+      const d = dict();
+      const titleKey = tile.dataset.i18nTitle;
+      const descKey = tile.dataset.i18nDesc;
+      lbTitle.textContent = (titleKey && d[titleKey]) || tile.dataset.title;
+      lbDesc.textContent = (descKey && d[descKey]) || tile.dataset.desc;
+
+      if (tile.dataset.url) {
+        lbLink.href = tile.dataset.url;
+        lbLink.hidden = false;
+      } else {
+        lbLink.removeAttribute("href");
+        lbLink.hidden = true;
+      }
+      lightbox.showModal();
+    });
+  });
+
+  document.getElementById("lbClose").addEventListener("click", () => lightbox.close());
+  // Click on the backdrop (outside the card) closes the dialog.
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) lightbox.close();
+  });
 
   /* ---------- Contact form ---------- */
   const form = document.getElementById("contactForm");
   const status = document.getElementById("formStatus");
   const cfg = window.AURELIAN_CONFIG;
 
-  // Status messages are not in the HTML, so Greek versions live here.
-  const EL_MSG = {
-    "form.ok": "Σας ευχαριστούμε! Θα σας απαντήσουμε εντός 24 ωρών.",
-    "form.err": "Κάτι πήγε στραβά. Δοκιμάστε ξανά.",
-    "form.invalid": "Συμπληρώστε το όνομά σας και έναν έγκυρο αριθμό τηλεφώνου.",
-  };
-
-  const isEN = () => html.lang === "en";
-  const t = (key) => (isEN() ? EN[key] : EL_MSG[key]) || key;
-
   function validate(data) {
     if (!data.name.trim()) return false;
     return /^[+0-9 ()-]{8,40}$/.test(data.phone.trim());
+  }
+
+  function showStatus(message, isError) {
+    status.className = isError ? "form__status is-error" : "form__status";
+    status.textContent = message;
+    if (!reduceMotion()) {
+      gsap.fromTo(status,
+        { y: isError ? 0 : 8, opacity: 0, x: 0 },
+        { y: 0, opacity: 1, duration: 0.5, ease: EASE }
+      );
+      if (isError) gsap.fromTo(form, { x: -8 }, { x: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+    }
   }
 
   form.addEventListener("submit", async (event) => {
@@ -205,15 +292,13 @@
     };
 
     if (!validate(data)) {
-      status.className = "form__status is-error";
-      status.textContent = t("form.invalid");
+      showStatus(t("form.invalid"), true);
       return;
     }
 
     const button = form.querySelector("button[type=submit]");
     button.disabled = true;
-    status.className = "form__status";
-    status.textContent = "…";
+    showStatus("…", false);
 
     try {
       const res = await fetch(`${cfg.supabaseUrl}/rest/v1/${cfg.table}`, {
@@ -227,10 +312,9 @@
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       form.reset();
-      status.textContent = t("form.ok");
+      showStatus(t("form.ok"), false);
     } catch (err) {
-      status.className = "form__status is-error";
-      status.textContent = t("form.err");
+      showStatus(t("form.err"), true);
       console.error(err);
     } finally {
       button.disabled = false;
