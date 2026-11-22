@@ -445,11 +445,14 @@
   const pageTop = (el) => measured(el).getBoundingClientRect().top + window.scrollY;
 
   // Where the page should rest for a section: centred if it fits on screen, top if it is taller
+  // Short sections are centred in the space below the fixed header; tall ones start just under it
   const restingY = (el) => {
     const top = pageTop(el);
     const height = measured(el).offsetHeight;
-    const y = height > window.innerHeight ? top : top - (window.innerHeight - height) / 2;
-    return clampY(y);
+    if (height > window.innerHeight) return clampY(top);
+    const headerH = document.querySelector(".site-header")?.offsetHeight || 0;
+    const room = window.innerHeight - headerH;
+    return clampY(top - headerH - (room - height) / 2);
   };
 
   let moving = false;
