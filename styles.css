@@ -127,6 +127,7 @@ a { color: inherit; }
 .nav { display: flex; gap: clamp(1rem, 2.5vw, 2rem); }
 .nav a {
   text-decoration: none;
+  display: inline-flex; align-items: center; min-height: 44px;
   font-size: 0.92rem;
   color: var(--muted);
   position: relative;
@@ -144,6 +145,7 @@ a { color: inherit; }
 .lang-toggle {
   font: inherit; font-size: 0.8rem; font-weight: 700;
   letter-spacing: 0.1em;
+  min-height: 44px; min-width: 44px;
   padding: 0.45rem 0.9rem;
   border: 1px solid var(--mint);
   background: transparent;
