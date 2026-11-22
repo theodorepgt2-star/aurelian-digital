@@ -13,6 +13,8 @@
 <body>
 
   <div class="grain" aria-hidden="true"></div>
+  <div class="curtain" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"></div>
 
   <header class="site-header" id="top">
     <a class="logo" href="#top" aria-label="Aurelian Digital">Aurelian<span> Digital</span></a>
@@ -50,6 +52,18 @@
       <a class="scroll-cue" href="#services" aria-label="Κάντε κύλιση">
         <span></span>
       </a>
+    </section>
+
+    <!-- MARQUEE: replace these words with client logos when you have them -->
+    <section class="marquee" aria-label="Κατηγορίες πελατών">
+      <div class="marquee__track">
+        <div class="marquee__group">
+          <span>Εστιατόρια</span><span>Ελεύθεροι επαγγελματίες</span><span>Σαλόνια</span><span>Ιστοσελίδες με χαρακτήρα</span><span>Κρατήσεις</span><span>Portfolio</span>
+        </div>
+        <div class="marquee__group" aria-hidden="true">
+          <span>Εστιατόρια</span><span>Ελεύθεροι επαγγελματίες</span><span>Σαλόνια</span><span>Ιστοσελίδες με χαρακτήρα</span><span>Κρατήσεις</span><span>Portfolio</span>
+        </div>
+      </div>
     </section>
 
     <!-- SERVICES (pinned horizontal) -->
@@ -223,6 +237,7 @@
   </main>
 
   <footer class="footer">
+    <div class="footer__mark" aria-hidden="true">Aurelian</div>
     <p class="footer__brand">Aurelian Digital</p>
     <p data-i18n="footer.tag">Ιστοσελίδες με χαρακτήρα</p>
     <a href="mailto:theodorepgt2@gmail.com">theodorepgt2@gmail.com</a>

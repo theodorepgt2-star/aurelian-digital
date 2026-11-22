@@ -131,11 +131,11 @@
     const splitTarget = document.querySelector("[data-split] span");
 
     document.fonts.ready.then(() => {
-      const split = new SplitText(splitTarget, { type: "lines", linesClass: "split-line" });
+      const split = new SplitText(splitTarget, { type: "words", wordsClass: "split-word" });
       window.__heroSplit = split;
 
       const tl = gsap.timeline({ defaults: { duration: DURATION, ease: EASE } });
-      tl.from(split.lines, { yPercent: 105, stagger: STAGGER })
+      tl.from(split.words, { yPercent: 110, stagger: 0.08 })
         .from(".eyebrow", { y: 16, opacity: 0, duration: 0.6 }, "<")
         .from(".hero__sub", { y: 24, opacity: 0, duration: 0.7 }, "-=0.6")
         .from(".hero__cta .btn", { y: 20, opacity: 0, duration: 0.6, stagger: 0.1 }, "-=0.5")
@@ -176,10 +176,18 @@
     });
 
     // Section titles reveal as they enter.
+    // Section titles reveal word by word as they enter the viewport.
     gsap.utils.toArray(".section-title").forEach((el) => {
-      gsap.from(el, {
-        y: 40, opacity: 0, duration: DURATION, ease: EASE,
-        scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none reverse" },
+      document.fonts.ready.then(() => {
+        const split = new SplitText(el, { type: "words", wordsClass: "split-word" });
+        gsap.from(split.words, {
+          yPercent: 110,
+          duration: 0.8,
+          ease: EASE,
+          stagger: 0.06,
+          scrollTrigger: { trigger: el, start: "top 85%" },
+          onComplete: () => split.revert(),
+        });
       });
     });
 
@@ -207,6 +215,47 @@
 
   // Reduced-motion users get the static layout from CSS; nothing to animate.
   mm.add("(prefers-reduced-motion: reduce)", () => {});
+
+  // Extra motion: page-load curtain, marquee, footer wordmark, spotlight cursor.
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    // Page transition: the dark curtain lifts to reveal the page.
+    gsap.to(".curtain", { yPercent: -100, duration: 1.2, ease: "expo.inOut", delay: 0.15 });
+
+    // Marquee loops endlessly and slows down on hover.
+    const marqueeEl = document.querySelector(".marquee");
+    const marquee = gsap.to(".marquee__track", { xPercent: -50, duration: 28, ease: "none", repeat: -1 });
+    marqueeEl.addEventListener("mouseenter", () => gsap.to(marquee, { timeScale: 0.25, duration: 0.6 }));
+    marqueeEl.addEventListener("mouseleave", () => gsap.to(marquee, { timeScale: 1, duration: 0.6 }));
+
+    // Footer wordmark fades in as the footer scrolls into view.
+    gsap.fromTo(".footer__mark",
+      { opacity: 0.05, yPercent: 30 },
+      {
+        opacity: 0.35,
+        yPercent: 0,
+        ease: "none",
+        scrollTrigger: { trigger: ".footer", start: "top bottom", end: "bottom bottom", scrub: 1 },
+      },
+    );
+
+    // Spotlight cursor: a ring that eases after the pointer and grows over interactive elements.
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      const ring = document.querySelector(".cursor");
+      const xTo = gsap.quickTo(ring, "x", { duration: 0.5, ease: "power3.out" });
+      const yTo = gsap.quickTo(ring, "y", { duration: 0.5, ease: "power3.out" });
+
+      window.addEventListener("pointermove", (e) => {
+        xTo(e.clientX);
+        yTo(e.clientY);
+      });
+
+      document.body.classList.add("has-cursor");
+      document.querySelectorAll("a, button, .card, .tile").forEach((el) => {
+        el.addEventListener("pointerenter", () => ring.classList.add("is-active"));
+        el.addEventListener("pointerleave", () => ring.classList.remove("is-active"));
+      });
+    }
+  });
 
   /* ---------- Spotlight on cards (pointer tracking, one rAF per frame) ---------- */
   if (window.matchMedia("(hover: hover)").matches && !reduceMotion()) {
