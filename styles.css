@@ -586,10 +586,10 @@ a { color: inherit; }
   transform-origin: 0% 100%;
   width: var(--cw);
   aspect-ratio: 3 / 4;
-  border-radius: 22px;
+  border-radius: 6px;
   overflow: hidden;
   cursor: pointer;
-  border: 1px solid rgba(174, 246, 207, 0.35);
+  border: 1px solid rgba(174, 246, 207, 0.25);
   box-shadow: 0 30px 60px -28px rgba(0, 0, 0, 0.8), 0 0 40px -16px rgba(95, 230, 160, 0.35);
   background: var(--space-lift);
   will-change: transform;

@@ -321,9 +321,8 @@
   if (deck) {
     const cards = [...deck.querySelectorAll(".deck__card")];
     const dotsWrap = document.getElementById("deckDots");
-    const FAN_STEP = 10;     // degrees between cards in the fan
-    const FRONT_X = -80;     // px the front card moves to the left when the fan opens
-    const FRONT_ROT = -7;    // degrees for the front card
+    const FAN_OFFSET = 70;   // px between cards in the straight row
+    const FRONT_X = -90;     // px the front card moves to the left when the row opens
     const OPEN_DELAY = 3;    // seconds the stack stays closed before it opens
     let order = cards.slice(); // order[0] is the front card
     let opened = false;
@@ -337,11 +336,11 @@
       dotEls.forEach((d, i) => d.classList.toggle("is-active", i === frontIndex));
     };
 
-    // Slot 0: front card, on the left and on top.
-    // Slots 1..n-1: fan out to the right, each one rotated further, behind the front card.
+    // Slot 0: front card, moved left and on top.
+    // Slots 1..n-1: a straight row to the right, each one behind the previous.
     const slotFor = (k, n) => (k === 0
-      ? { x: FRONT_X, rotation: FRONT_ROT, z: n }
-      : { x: 0, rotation: k * FAN_STEP, z: n - k });
+      ? { x: FRONT_X, z: n }
+      : { x: k * FAN_OFFSET, z: n - k });
 
     const place = (animate, delay = 0) => {
       const n = order.length;
@@ -350,11 +349,11 @@
         card.style.zIndex = s.z;
         if (animate && !reduceMotion()) {
           gsap.to(card, {
-            x: s.x, rotation: s.rotation, opacity: 1,
+            x: s.x, rotation: 0, opacity: 1,
             duration: 0.9, ease: "power3.out", delay: delay + k * 0.08,
           });
         } else {
-          gsap.set(card, { x: s.x, rotation: s.rotation, opacity: 1 });
+          gsap.set(card, { x: s.x, rotation: 0, opacity: 1 });
         }
       });
       markDots();
@@ -363,7 +362,7 @@
     // Closed stack: all cards on top of each other, pivoting from their bottom-left corner
     const stack = () => {
       cards.forEach((card, k) => {
-        gsap.set(card, { yPercent: -100, x: 0, rotation: 0, opacity: 1 });
+        gsap.set(card, { x: 0, rotation: 0, opacity: 1 });
         card.style.zIndex = cards.length - k;
       });
       markDots();
@@ -380,12 +379,12 @@
       busy = true;
       const front = order[0];
       gsap.to(front, {
-        x: "-=260", rotation: -18, opacity: 0,
+        x: "-=260", opacity: 0,
         duration: reduceMotion() ? 0 : 0.55, ease: "power2.in",
         onComplete: () => {
           order.shift();
           order.push(front);
-          gsap.set(front, { x: 0, rotation: (order.length - 1) * FAN_STEP, opacity: 0 });
+          gsap.set(front, { x: (order.length - 1) * FAN_OFFSET, opacity: 0 });
           place(true);
           busy = false;
         },
