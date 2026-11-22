@@ -321,7 +321,7 @@
   if (deck) {
     const cards = [...deck.querySelectorAll(".deck__card")];
     const dotsWrap = document.getElementById("deckDots");
-    const FAN_OFFSET = 40;   // px between cards in the straight row
+    const FIRST_GAP = 90;    // px from the front card to the second card
     const FRONT_X = -50;     // px the front card moves to the left when the row opens
     const OPEN_DELAY = 3;    // seconds the stack stays closed before it opens
     let order = cards.slice(); // order[0] is the front card
@@ -338,9 +338,9 @@
 
     // Slot 0: front card, moved left and on top.
     // Slots 1..n-1: a straight row to the right, each one behind the previous.
-    const slotFor = (k, n) => (k === 0
-      ? { x: FRONT_X, z: n }
-      : { x: k * FAN_OFFSET, z: n - k });
+    // Each gap is half the previous one: front→2nd = FIRST_GAP, 2nd→3rd = FIRST_GAP/2, and so on.
+    const xFor = (k) => (k === 0 ? FRONT_X : FRONT_X + FIRST_GAP * (2 - Math.pow(0.5, k - 1)));
+    const slotFor = (k, n) => ({ x: xFor(k), z: k === 0 ? n : n - k });
 
     const place = (animate, delay = 0) => {
       const n = order.length;
@@ -384,7 +384,7 @@
         onComplete: () => {
           order.shift();
           order.push(front);
-          gsap.set(front, { x: (order.length - 1) * FAN_OFFSET, opacity: 0 });
+          gsap.set(front, { x: xFor(order.length - 1), opacity: 0 });
           place(true);
           busy = false;
         },
