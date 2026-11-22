@@ -16,3 +16,6 @@ create policy "anon can submit contact requests"
   for insert
   to anon
   with check (true);
+
+-- Table-level privilege is required in addition to the RLS policy.
+grant insert on table public.contact_requests to anon;
