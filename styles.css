@@ -15,7 +15,7 @@
   --sans: "Manrope", system-ui, sans-serif;
 
   --radius: 20px;
-  --glass: rgba(10, 10, 36, 0.55);
+  --glass: rgba(10, 10, 36, 0.88);
   --shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   --ease-out: cubic-bezier(.2, .7, .2, 1);
 }
@@ -163,7 +163,7 @@ a { color: inherit; }
 }
 .btn:hover { transform: translateY(-2px); }
 .btn--primary {
-  background: linear-gradient(135deg, var(--jade), var(--mint));
+  background: var(--jade);
   color: var(--space);
   box-shadow: 0 14px 30px -16px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
@@ -285,8 +285,6 @@ a { color: inherit; }
   gap: 0.9rem;
   padding: 2.2rem;
   background: var(--glass);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -404,7 +402,7 @@ a { color: inherit; }
   max-width: min(92vw, 520px);
   width: 100%;
 }
-.lightbox::backdrop { background: rgba(5, 5, 15, 0.75); backdrop-filter: blur(4px); }
+.lightbox::backdrop { background: rgba(5, 5, 15, 0.82); }
 .lightbox__card {
   position: relative;
   background: var(--space-lift);
