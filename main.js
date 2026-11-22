@@ -481,9 +481,19 @@
   const sectionScrollEnabled = () =>
     !reduceMotion() && window.matchMedia("(hover: hover) and (pointer: fine)").matches && !lightboxEl.open;
 
+  // While the services section is pinned, the wheel drives its horizontal track, so it stays native
+  const insidePinnedServices = () => {
+    const services = document.getElementById("services");
+    const spacer = measured(services);
+    const start = pageTop(services);
+    const end = start + spacer.offsetHeight - window.innerHeight;
+    return window.scrollY >= start - 2 && window.scrollY <= end + 2;
+  };
+
   window.addEventListener("wheel", (e) => {
     if (!sectionScrollEnabled() || e.ctrlKey) return;
-    if (e.target.closest("textarea, select")) return;
+    if (e.target.closest("textarea, select, #contactForm")) return;
+    if (insidePinnedServices()) return;
     if (Math.abs(e.deltaY) < 4) return;
     e.preventDefault();
     goToSection(Math.sign(e.deltaY));
@@ -491,7 +501,8 @@
 
   window.addEventListener("keydown", (e) => {
     if (!sectionScrollEnabled()) return;
-    if (e.target.closest("input, textarea, select, [contenteditable]")) return;
+    if (e.target.closest("input, textarea, select, [contenteditable], #contactForm")) return;
+    if (insidePinnedServices()) return;
     const down = ["ArrowDown", "PageDown", " "].includes(e.key);
     const up = ["ArrowUp", "PageUp"].includes(e.key);
     if (!down && !up) return;
