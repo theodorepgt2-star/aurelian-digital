@@ -146,10 +146,6 @@
   mm.add("(prefers-reduced-motion: no-preference)", () => {
     runHero();
 
-    // Ambient orbs drift slowly in the hero background.
-    gsap.to(".orb--1", { x: 120, y: 80, duration: 9, ease: "sine.inOut", yoyo: true, repeat: -1 });
-    gsap.to(".orb--2", { x: -100, y: 120, duration: 11, ease: "sine.inOut", yoyo: true, repeat: -1 });
-    gsap.to(".orb--3", { x: 90, y: -70, duration: 13, ease: "sine.inOut", yoyo: true, repeat: -1 });
 
     // Hero content drifts up and fades as you scroll past it.
     gsap.to(".hero__inner", {
