@@ -174,8 +174,15 @@
   const status = document.getElementById("formStatus");
   const cfg = window.AURELIAN_CONFIG;
 
+  // Status messages are not in the HTML, so Greek versions live here.
+  const EL_MSG = {
+    "form.ok": "Σας ευχαριστούμε! Θα σας απαντήσουμε εντός 24 ωρών.",
+    "form.err": "Κάτι πήγε στραβά. Δοκιμάστε ξανά.",
+    "form.invalid": "Συμπληρώστε το όνομά σας και έναν έγκυρο αριθμό τηλεφώνου.",
+  };
+
   const isEN = () => html.lang === "en";
-  const t = (key) => (isEN() ? EN[key] : GR[key]) || key;
+  const t = (key) => (isEN() ? EN[key] : EL_MSG[key]) || key;
 
   function validate(data) {
     if (!data.name.trim()) return false;
