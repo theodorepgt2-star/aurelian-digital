@@ -1,12 +1,13 @@
--- Contact requests table (already applied to project cljmiqiyhgsveeplzeyb)
+-- Contact requests table (current schema, applied to project cljmiqiyhgsveeplzeyb)
 create table if not exists public.contact_requests (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
   name text not null check (char_length(name) between 1 and 120),
-  email text not null check (char_length(email) between 3 and 200),
-  phone text check (char_length(phone) <= 40),
+  phone text not null check (phone ~ '^[+0-9 ()-]{8,40}$'),
   project_type text not null check (project_type in ('freelancer','restaurant','other')),
-  message text not null check (char_length(message) between 1 and 2000)
+  budget text check (budget in ('under_500','500_1000','1000_2500','over_2500','unsure')),
+  message text check (char_length(message) <= 2000),
+  email text check (char_length(email) <= 200)
 );
 
 alter table public.contact_requests enable row level security;

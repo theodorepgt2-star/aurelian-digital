@@ -40,17 +40,22 @@
     "contact.title": "Tell us about your project.",
     "contact.sub": "We will reply within 24 hours.",
     "form.name": "Name",
-    "form.email": "Email",
     "form.phone": "Phone",
     "form.type": "Project type",
     "form.type.freelancer": "Freelancer",
     "form.type.restaurant": "Restaurant",
     "form.type.other": "Other",
-    "form.message": "Message",
+    "form.budget": "Preferred budget",
+    "form.budget.under_500": "Up to €500",
+    "form.budget.500_1000": "€500 – €1,000",
+    "form.budget.1000_2500": "€1,000 – €2,500",
+    "form.budget.over_2500": "Over €2,500",
+    "form.budget.unsure": "Not sure yet",
+    "form.message": "Message (optional)",
     "form.submit": "Send request",
     "form.ok": "Thank you! We will reply within 24 hours.",
-    "form.err": "Something went wrong. Please try again or email us directly.",
-    "form.invalid": "Please fill in your name, a valid email and a message.",
+    "form.err": "Something went wrong. Please try again.",
+    "form.invalid": "Please enter your name and a valid phone number.",
     "footer.tag": "Websites with character",
   };
 
@@ -173,8 +178,8 @@
   const t = (key) => (isEN() ? EN[key] : GR[key]) || key;
 
   function validate(data) {
-    if (!data.name.trim() || !data.message.trim()) return false;
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim());
+    if (!data.name.trim()) return false;
+    return /^[+0-9 ()-]{8,40}$/.test(data.phone.trim());
   }
 
   form.addEventListener("submit", async (event) => {
@@ -186,10 +191,10 @@
 
     const data = {
       name: String(fd.get("name") || ""),
-      email: String(fd.get("email") || ""),
-      phone: String(fd.get("phone") || "") || null,
+      phone: String(fd.get("phone") || ""),
       project_type: String(fd.get("project_type") || "other"),
-      message: String(fd.get("message") || ""),
+      budget: String(fd.get("budget") || "unsure"),
+      message: String(fd.get("message") || "").trim() || null,
     };
 
     if (!validate(data)) {

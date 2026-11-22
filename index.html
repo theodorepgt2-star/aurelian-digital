@@ -109,14 +109,11 @@
           <label><span data-i18n="form.name">Όνομα</span>
             <input name="name" type="text" required maxlength="120" autocomplete="name" />
           </label>
-          <label><span data-i18n="form.email">Email</span>
-            <input name="email" type="email" required maxlength="200" autocomplete="email" />
+          <label><span data-i18n="form.phone">Τηλέφωνο</span>
+            <input name="phone" type="tel" required maxlength="40" autocomplete="tel" />
           </label>
         </div>
         <div class="form__row">
-          <label><span data-i18n="form.phone">Τηλέφωνο</span>
-            <input name="phone" type="tel" maxlength="40" autocomplete="tel" />
-          </label>
           <label><span data-i18n="form.type">Είδος έργου</span>
             <select name="project_type" required>
               <option value="freelancer" data-i18n="form.type.freelancer">Ελεύθερος επαγγελματίας</option>
@@ -124,9 +121,18 @@
               <option value="other" data-i18n="form.type.other">Άλλο</option>
             </select>
           </label>
+          <label><span data-i18n="form.budget">Προτιμώμενος προϋπολογισμός</span>
+            <select name="budget" required>
+              <option value="under_500" data-i18n="form.budget.under_500">Έως 500 €</option>
+              <option value="500_1000" data-i18n="form.budget.500_1000">500 € – 1.000 €</option>
+              <option value="1000_2500" data-i18n="form.budget.1000_2500">1.000 € – 2.500 €</option>
+              <option value="over_2500" data-i18n="form.budget.over_2500">Πάνω από 2.500 €</option>
+              <option value="unsure" data-i18n="form.budget.unsure">Δεν είμαι σίγουρος/η</option>
+            </select>
+          </label>
         </div>
-        <label class="form__full"><span data-i18n="form.message">Μήνυμα</span>
-          <textarea name="message" rows="5" required maxlength="2000"></textarea>
+        <label class="form__full"><span data-i18n="form.message">Μήνυμα (προαιρετικό)</span>
+          <textarea name="message" rows="5" maxlength="2000"></textarea>
         </label>
         <!-- honeypot against bots -->
         <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
