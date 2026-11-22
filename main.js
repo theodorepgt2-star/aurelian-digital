@@ -565,8 +565,11 @@
     input.addEventListener("blur", () => {
       input.setAttribute("aria-invalid", isValid(input.value) ? "false" : "true");
     });
+    input.addEventListener("focus", () => input.removeAttribute("aria-invalid"));
     input.addEventListener("input", () => input.removeAttribute("aria-invalid"));
   });
+
+  let sending = false;
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -584,12 +587,16 @@
     };
 
     if (!validate(data)) {
+      // Send the visitor to the first field that needs fixing, instead of a dead click
+      const firstInvalid = Object.keys(fieldRules).find((name) => !fieldRules[name](form.elements[name].value));
+      form.elements[firstInvalid]?.focus();
       showStatus(t("form.invalid"), true);
       return;
     }
 
-    const button = form.querySelector("button[type=submit]");
-    button.disabled = true;
+    // The button stays clickable; a flag stops double sends instead of disabling it
+    if (sending) return;
+    sending = true;
     showStatus("…", false);
 
     try {
@@ -609,7 +616,7 @@
       showStatus(t("form.err"), true);
       console.error(err);
     } finally {
-      button.disabled = false;
+      sending = false;
     }
   });
 })();
