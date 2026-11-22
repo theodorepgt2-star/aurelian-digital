@@ -581,7 +581,9 @@ a { color: inherit; }
   --cw: clamp(200px, 22vw, 300px);
   all: unset;
   position: absolute;
-  left: 50%; top: 45%;
+  /* Pivot at the bottom-left corner: cards fan out to the right from here */
+  left: 18%; top: 78%;
+  transform-origin: 0% 100%;
   width: var(--cw);
   aspect-ratio: 3 / 4;
   border-radius: 22px;
