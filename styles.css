@@ -25,7 +25,8 @@
 html { scroll-behavior: smooth; background: var(--space); }
 body {
   margin: 0;
-  background: var(--space);
+  /* No background here: it would paint over the starfield canvas. */
+  background: transparent;
   color: var(--bone);
   font-family: var(--sans);
   font-size: 1rem;
