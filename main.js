@@ -481,20 +481,20 @@
   const sectionScrollEnabled = () =>
     !reduceMotion() && window.matchMedia("(hover: hover) and (pointer: fine)").matches && !lightboxEl.open;
 
-  // While the services section is pinned, the wheel drives its horizontal track, so it stays native
-  const insidePinnedServices = () => {
+  // While the services section is pinned, scrolling in a direction stays native until the pin has no travel left
+  const pinnedCanScroll = (direction) => {
     const services = document.getElementById("services");
     const spacer = measured(services);
     const start = pageTop(services);
     const end = start + spacer.offsetHeight - window.innerHeight;
-    return window.scrollY >= start - 2 && window.scrollY <= end + 2;
+    if (window.scrollY < start - 2 || window.scrollY > end + 2) return false;
+    return direction > 0 ? window.scrollY < end - 2 : window.scrollY > start + 2;
   };
 
   window.addEventListener("wheel", (e) => {
     if (!sectionScrollEnabled() || e.ctrlKey) return;
     if (e.target.closest("textarea, select, #contactForm")) return;
-    if (insidePinnedServices()) return;
-    if (Math.abs(e.deltaY) < 4) return;
+    if (Math.abs(e.deltaY) < 4 || pinnedCanScroll(Math.sign(e.deltaY))) return;
     e.preventDefault();
     goToSection(Math.sign(e.deltaY));
   }, { passive: false });
@@ -502,10 +502,10 @@
   window.addEventListener("keydown", (e) => {
     if (!sectionScrollEnabled()) return;
     if (e.target.closest("input, textarea, select, [contenteditable], #contactForm")) return;
-    if (insidePinnedServices()) return;
     const down = ["ArrowDown", "PageDown", " "].includes(e.key);
     const up = ["ArrowUp", "PageUp"].includes(e.key);
     if (!down && !up) return;
+    if (pinnedCanScroll(down ? 1 : -1)) return;
     e.preventDefault();
     goToSection(down ? 1 : -1);
   });
