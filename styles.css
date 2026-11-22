@@ -492,6 +492,14 @@ a { color: inherit; }
 .footer__brand { font-family: var(--serif); font-size: 1.4rem; color: var(--ivory); margin: 0; }
 .footer a { color: var(--amber); }
 
+/* ===== Section transition wipe (between sections) ===== */
+.wipe {
+  position: fixed; inset: 0; z-index: 190;
+  background: linear-gradient(160deg, var(--brown-deep) 0%, var(--brown) 55%, var(--gold) 120%);
+  transform: scaleY(0);
+  pointer-events: none;
+}
+
 /* ===== Page-load curtain ===== */
 .curtain {
   position: fixed; inset: 0; z-index: 200;
@@ -584,7 +592,7 @@ a { color: inherit; }
   .btn, .card, .nav a::after, .tile__art, .tile__meta { transition: none !important; }
   .btn:hover, .card:hover, .tile:hover .tile__art { transform: none; }
   .scroll-cue span, .lightbox[open] { animation: none; }
-  .hero__video, .curtain { display: none; }
+  .hero__video, .curtain, .wipe { display: none; }
   .btn::after { display: none; }
   .marquee__track { transform: none !important; }
   .grain { display: none; }

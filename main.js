@@ -320,6 +320,40 @@
     if (e.target === lightbox) lightbox.close();
   });
 
+  /* ---------- Section transitions: wipe out, jump, wipe in ---------- */
+  const wipe = document.querySelector(".wipe");
+  let transitioning = false;
+
+  document.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", (e) => {
+      if (reduceMotion()) return; // native jump for reduced motion
+
+      const id = link.getAttribute("href").slice(1);
+      const target = id ? document.getElementById(id) : null;
+      if (id && !target) return;
+      if (transitioning) {
+        e.preventDefault();
+        return;
+      }
+
+      e.preventDefault();
+      transitioning = true;
+
+      const top = target ? target.getBoundingClientRect().top + window.scrollY : 0;
+
+      gsap.timeline({ onComplete: () => { transitioning = false; } })
+        .set(wipe, { transformOrigin: "bottom" })
+        .to(wipe, { scaleY: 1, duration: 0.55, ease: "power3.inOut" })
+        .add(() => {
+          window.scrollTo({ top, behavior: "instant" });
+          history.replaceState(null, "", id ? `#${id}` : window.location.pathname);
+          ScrollTrigger.refresh();
+        })
+        .set(wipe, { transformOrigin: "top" })
+        .to(wipe, { scaleY: 0, duration: 0.7, ease: "power3.inOut", delay: 0.15 });
+    });
+  });
+
   /* ---------- Contact form ---------- */
   const form = document.getElementById("contactForm");
   const status = document.getElementById("formStatus");
