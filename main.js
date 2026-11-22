@@ -316,6 +316,97 @@
     if (e.target === lightbox) lightbox.close();
   });
 
+  /* ---------- Hero preview deck: fanned cards on an arc ---------- */
+  const deck = document.getElementById("deck");
+  if (deck) {
+    const cards = [...deck.querySelectorAll(".deck__card")];
+    const dotsWrap = document.getElementById("deckDots");
+    const ARC_STEP = 11;     // degrees between neighbouring cards
+    const ARC_RADIUS = 520;  // px, how strongly the fan curves
+    const center = Math.floor(cards.length / 2);
+    let order = cards.slice();
+    let busy = false;
+
+    // Dots: one per project
+    cards.forEach(() => dotsWrap.appendChild(document.createElement("span")));
+    const dotEls = [...dotsWrap.children];
+
+    // Slot k in the fan: centre card is the front one
+    const slotFor = (k) => {
+      const angle = (k - center) * ARC_STEP;
+      const rad = (angle * Math.PI) / 180;
+      return {
+        x: Math.sin(rad) * ARC_RADIUS,
+        y: (1 - Math.cos(rad)) * ARC_RADIUS,
+        rotation: angle,
+        zIndex: cards.length - Math.abs(k - center),
+      };
+    };
+
+    const markDots = () => {
+      const frontIndex = cards.indexOf(order[center]);
+      dotEls.forEach((d, i) => d.classList.toggle("is-active", i === frontIndex));
+    };
+
+    const layout = (animate) => {
+      order.forEach((card, k) => {
+        const s = slotFor(k);
+        if (animate && !reduceMotion()) {
+          gsap.to(card, { x: s.x, y: s.y, rotation: s.rotation, zIndex: s.zIndex, opacity: 1, duration: 0.8, ease: "power3.out" });
+        } else {
+          gsap.set(card, { x: s.x, y: s.y, rotation: s.rotation, zIndex: s.zIndex, opacity: 1 });
+        }
+      });
+      markDots();
+    };
+
+    // Opening: the cards start in a pile and fan out one by one
+    const intro = () => {
+      cards.forEach((card) => gsap.set(card, { xPercent: -50, yPercent: -50, x: 0, y: 0, rotation: 0, opacity: 0 }));
+      if (reduceMotion()) {
+        layout(false);
+        return;
+      }
+      order.forEach((card, k) => {
+        const s = slotFor(k);
+        gsap.to(card, {
+          x: s.x, y: s.y, rotation: s.rotation, zIndex: s.zIndex, opacity: 1,
+          duration: 1, ease: "power3.out", delay: 0.4 + k * 0.12,
+        });
+      });
+      markDots();
+    };
+
+    // Clicking the front card sends it to the right, then it returns at the back of the fan
+    const advance = () => {
+      if (busy) return;
+      busy = true;
+      const front = order[center];
+      const exitDuration = reduceMotion() ? 0 : 0.55;
+
+      gsap.to(front, {
+        x: "+=520", rotation: 22, opacity: 0,
+        duration: exitDuration, ease: "power2.in",
+        onComplete: () => {
+          order.splice(center, 1);
+          order.unshift(front);
+          const back = slotFor(0);
+          gsap.set(front, { x: back.x, y: back.y, rotation: back.rotation, zIndex: back.zIndex, opacity: 0 });
+          layout(true);
+          busy = false;
+        },
+      });
+    };
+
+    cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        if (card === order[center]) advance();
+      });
+    });
+
+    intro();
+  }
+
   /* ---------- Section transitions: wipe out, jump, wipe in ---------- */
   const wipe = document.querySelector(".wipe");
   let transitioning = false;

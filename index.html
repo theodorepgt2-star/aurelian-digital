@@ -53,6 +53,25 @@
           <a class="btn btn--ghost" href="#services" data-i18n="hero.cta2">Δείτε τις υπηρεσίες</a>
         </div>
       </div>
+      <!-- Preview deck: fanned cards, click the front one to bring the next forward -->
+      <div class="deck" id="deck">
+        <button class="deck__card" type="button" aria-label="Olga's Nails">
+          <span class="deck__media deck__art--1">
+            <img src="assets/previews/olga.jpg" alt="" onerror="this.remove()" />
+          </span>
+          <span class="deck__name">Olga's Nails</span>
+        </button>
+        <button class="deck__card" type="button" aria-label="Σύντομα">
+          <span class="deck__media deck__art--2"></span>
+          <span class="deck__name">Σύντομα</span>
+        </button>
+        <button class="deck__card" type="button" aria-label="Σύντομα">
+          <span class="deck__media deck__art--3"></span>
+          <span class="deck__name">Σύντομα</span>
+        </button>
+        <div class="deck__dots" id="deckDots" aria-hidden="true"></div>
+      </div>
+
       <a class="scroll-cue" href="#services" aria-label="Κάντε κύλιση">
         <span></span>
       </a>
