@@ -220,12 +220,6 @@
     // Page transition: the dark curtain lifts to reveal the page.
     gsap.to(".curtain", { yPercent: -100, duration: 1.2, ease: "expo.inOut", delay: 0.15 });
 
-    // Marquee loops endlessly and slows down on hover.
-    const marqueeEl = document.querySelector(".marquee");
-    const marquee = gsap.to(".marquee__track", { xPercent: -50, duration: 28, ease: "none", repeat: -1 });
-    marqueeEl.addEventListener("mouseenter", () => gsap.to(marquee, { timeScale: 0.25, duration: 0.6 }));
-    marqueeEl.addEventListener("mouseleave", () => gsap.to(marquee, { timeScale: 1, duration: 0.6 }));
-
     // Footer wordmark fades in as the footer scrolls into view.
     gsap.fromTo(".footer__mark",
       { opacity: 0.05, yPercent: 30 },
@@ -440,8 +434,7 @@
   });
 
   /* ---------- Section-by-section scrolling (desktop: wheel and arrow keys) ---------- */
-  // The client marquee is a band, not a stop: scrolling goes from the hero straight to services
-  const SECTION_SELECTOR = "main > section:not(.marquee), footer.footer";
+  const SECTION_SELECTOR = "main > section, footer.footer";
   const lightboxEl = document.getElementById("lightbox");
   const maxScrollY = () => document.documentElement.scrollHeight - window.innerHeight;
   const clampY = (y) => Math.min(Math.max(y, 0), maxScrollY());
