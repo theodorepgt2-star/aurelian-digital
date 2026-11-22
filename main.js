@@ -482,7 +482,7 @@
   const sectionScrollEnabled = () =>
     !reduceMotion() && window.matchMedia("(hover: hover) and (pointer: fine)").matches && !lightboxEl.open;
 
-  // While the services section is pinned, scrolling in a direction stays native until the pin has no travel left
+  // While the services section is pinned, the wheel moves its track natively until the pin has no travel left
   const pinnedCanScroll = (direction) => {
     const services = document.getElementById("services");
     const spacer = measured(services);
@@ -506,7 +506,6 @@
     const down = ["ArrowDown", "PageDown", " "].includes(e.key);
     const up = ["ArrowUp", "PageUp"].includes(e.key);
     if (!down && !up) return;
-    if (pinnedCanScroll(down ? 1 : -1)) return;
     e.preventDefault();
     goToSection(down ? 1 : -1);
   });
