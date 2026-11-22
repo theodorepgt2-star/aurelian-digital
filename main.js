@@ -238,21 +238,35 @@
       },
     );
 
-    // Spotlight cursor: a ring that eases after the pointer and grows over interactive elements.
+    // Buttons glow gently as the pointer approaches them.
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-      const ring = document.querySelector(".cursor");
-      const xTo = gsap.quickTo(ring, "x", { duration: 0.5, ease: "power3.out" });
-      const yTo = gsap.quickTo(ring, "y", { duration: 0.5, ease: "power3.out" });
+      const GLOW_RADIUS = 140;
+      const buttons = [...document.querySelectorAll(".btn")];
+      let frame = 0;
+      let px = -9999;
+      let py = -9999;
+
+      const update = () => {
+        frame = 0;
+        buttons.forEach((btn) => {
+          const r = btn.getBoundingClientRect();
+          const dx = Math.max(r.left - px, 0, px - r.right);
+          const dy = Math.max(r.top - py, 0, py - r.bottom);
+          const dist = Math.hypot(dx, dy);
+          const glow = Math.max(0, 1 - dist / GLOW_RADIUS);
+          btn.style.setProperty("--glow", glow.toFixed(3));
+        });
+      };
 
       window.addEventListener("pointermove", (e) => {
-        xTo(e.clientX);
-        yTo(e.clientY);
+        px = e.clientX;
+        py = e.clientY;
+        if (!frame) frame = requestAnimationFrame(update);
       });
-
-      document.body.classList.add("has-cursor");
-      document.querySelectorAll("a, button, .card, .tile").forEach((el) => {
-        el.addEventListener("pointerenter", () => ring.classList.add("is-active"));
-        el.addEventListener("pointerleave", () => ring.classList.remove("is-active"));
+      window.addEventListener("pointerleave", () => {
+        px = -9999;
+        py = -9999;
+        if (!frame) frame = requestAnimationFrame(update);
       });
     }
   });
