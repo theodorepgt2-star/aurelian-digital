@@ -521,6 +521,19 @@
     }
   }
 
+  // Validate each field when the visitor leaves it; clear the error as soon as they edit it
+  const fieldRules = {
+    name: (v) => v.trim().length > 0,
+    phone: (v) => /^[+0-9 ()-]{8,40}$/.test(v.trim()),
+  };
+  Object.entries(fieldRules).forEach(([name, isValid]) => {
+    const input = form.elements[name];
+    input.addEventListener("blur", () => {
+      input.setAttribute("aria-invalid", isValid(input.value) ? "false" : "true");
+    });
+    input.addEventListener("input", () => input.removeAttribute("aria-invalid"));
+  });
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const fd = new FormData(form);

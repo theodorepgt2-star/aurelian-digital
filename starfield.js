@@ -329,8 +329,11 @@ const onResize = () => {
 window.addEventListener("resize", onResize);
 
 /* ---------- Render loop ---------- */
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 const frame = () => {
-  requestAnimationFrame(frame);
+  // Reduced-motion users get one still frame instead of a continuous loop
+  if (!reduceMotion) requestAnimationFrame(frame);
 
   finalPass.uniforms.iTime.value = performance.now() / 1000;
 
