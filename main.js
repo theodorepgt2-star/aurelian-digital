@@ -321,8 +321,8 @@
   if (deck) {
     const cards = [...deck.querySelectorAll(".deck__card")];
     const dotsWrap = document.getElementById("deckDots");
-    const FAN_OFFSET = 70;   // px between cards in the straight row
-    const FRONT_X = -90;     // px the front card moves to the left when the row opens
+    const FAN_OFFSET = 40;   // px between cards in the straight row
+    const FRONT_X = -50;     // px the front card moves to the left when the row opens
     const OPEN_DELAY = 3;    // seconds the stack stays closed before it opens
     let order = cards.slice(); // order[0] is the front card
     let opened = false;
@@ -362,7 +362,7 @@
     // Closed stack: all cards on top of each other, pivoting from their bottom-left corner
     const stack = () => {
       cards.forEach((card, k) => {
-        gsap.set(card, { x: 0, rotation: 0, opacity: 1 });
+        gsap.set(card, { yPercent: -100, x: 0, rotation: 0, opacity: 1 });
         card.style.zIndex = cards.length - k;
       });
       markDots();

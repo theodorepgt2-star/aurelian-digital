@@ -582,7 +582,7 @@ a { color: inherit; }
   all: unset;
   position: absolute;
   /* Pivot at the bottom-left corner: cards fan out to the right from here */
-  left: 18%; top: 78%;
+  left: 18%; top: 72%;
   transform-origin: 0% 100%;
   width: var(--cw);
   aspect-ratio: 3 / 4;
