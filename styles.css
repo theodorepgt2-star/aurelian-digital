@@ -1,5 +1,11 @@
 /* ===== Tokens (Starfield Close palette) ===== */
 :root {
+  --mint-rgb: 174, 246, 207;
+  --jade-rgb: 95, 230, 160;
+  --bone-rgb: 234, 255, 242;
+  --lilac-rgb: 199, 155, 255;
+  --space-rgb: 10, 10, 36;
+  --space-deep-rgb: 5, 5, 15;
   --space: #0a0a24;
   --space-deep: #05050f;
   --space-lift: #13133a;
@@ -9,14 +15,14 @@
   --lilac: #c79bff;
   --error: #c79bff;
   --sky: #aee9ff;
-  --muted: rgba(234, 255, 242, 0.84);
-  --line: rgba(174, 246, 207, 0.18);
+  --muted: rgb(var(--bone-rgb) / 0.84);
+  --line: rgb(var(--mint-rgb) / 0.18);
 
   --serif: "Cormorant Garamond", Georgia, serif;
   --sans: "Manrope", system-ui, sans-serif;
 
   --radius: 20px;
-  --glass: rgba(10, 10, 36, 0.88);
+  --glass: rgb(var(--space-rgb) / 0.88);
   --shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   --ease-out: cubic-bezier(.2, .7, .2, 1);
   --ease-in: cubic-bezier(.7, 0, .84, 0);
@@ -56,18 +62,18 @@ a { color: inherit; }
   position: fixed; inset: 0;
   z-index: -3;
   pointer-events: none;
-  background: radial-gradient(ellipse at 50% 40%, #13133a 0%, #0a0a24 55%, #05050f 100%);
+  background: radial-gradient(ellipse at 50% 40%, var(--space-lift) 0%, var(--space) 55%, var(--space-deep) 100%);
 }
 .stars-fallback::before {
   content: "";
   position: absolute; inset: 0;
   background-image:
-    radial-gradient(1px 1px at 15% 30%, rgba(234,255,242,0.9), transparent),
-    radial-gradient(1px 1px at 45% 70%, rgba(174,246,207,0.9), transparent),
-    radial-gradient(1.5px 1.5px at 75% 40%, rgba(234,255,242,0.8), transparent),
-    radial-gradient(1px 1px at 88% 85%, rgba(199,155,255,0.8), transparent),
-    radial-gradient(1px 1px at 5% 60%, rgba(95,230,160,0.8), transparent),
-    radial-gradient(1.2px 1.2px at 62% 12%, rgba(234,255,242,0.9), transparent);
+    radial-gradient(1px 1px at 15% 30%, rgb(var(--bone-rgb) / 0.9), transparent),
+    radial-gradient(1px 1px at 45% 70%, rgb(var(--mint-rgb) / 0.9), transparent),
+    radial-gradient(1.5px 1.5px at 75% 40%, rgb(var(--bone-rgb) / 0.8), transparent),
+    radial-gradient(1px 1px at 88% 85%, rgb(var(--lilac-rgb) / 0.8), transparent),
+    radial-gradient(1px 1px at 5% 60%, rgb(var(--jade-rgb) / 0.8), transparent),
+    radial-gradient(1.2px 1.2px at 62% 12%, rgb(var(--bone-rgb) / 0.9), transparent);
   background-size: 260px 260px;
   animation: twinkle 6s ease-in-out infinite alternate;
 }
@@ -101,7 +107,7 @@ a { color: inherit; }
   line-height: 1.05;
   margin: 0 0 1.5rem;
   text-wrap: balance;
-  text-shadow: 0 0 30px rgba(174, 246, 207, 0.25);
+  text-shadow: 0 0 30px rgb(var(--mint-rgb) / 0.25);
 }
 
 /* ===== Header ===== */
@@ -114,7 +120,7 @@ a { color: inherit; }
   justify-content: space-between;
   gap: 1.5rem;
   padding: 1.1rem clamp(1.25rem, 4vw, 3rem);
-  background: linear-gradient(to bottom, rgba(10, 10, 36, 0.85), transparent);
+  background: linear-gradient(to bottom, rgb(var(--space-rgb) / 0.85), transparent);
 }
 .logo {
   font-family: var(--serif);
@@ -176,7 +182,7 @@ a { color: inherit; }
   box-shadow: 0 14px 30px -16px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 .btn--primary:hover { box-shadow: 0 18px 36px -14px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.14); }
-.btn--ghost { border-color: var(--mint); color: var(--mint); background: rgba(10, 10, 36, 0.3); }
+.btn--ghost { border-color: var(--mint); color: var(--mint); background: rgb(var(--space-rgb) / 0.3); }
 .btn--ghost:hover { background: var(--mint); color: var(--space); }
 .btn--small { padding: 0.6rem 1.1rem; font-size: 0.85rem; margin-top: auto; }
 .btn:disabled { opacity: 0.6; cursor: wait; transform: none; }
@@ -189,7 +195,7 @@ a { color: inherit; }
   z-index: -1;
   pointer-events: none;
   opacity: var(--glow, 0);
-  box-shadow: 0 0 24px 4px rgba(174, 246, 207, 0.55);
+  box-shadow: 0 0 24px 4px rgb(var(--mint-rgb) / 0.55);
   transition: opacity var(--motion-300);
 }
 
@@ -211,7 +217,7 @@ a { color: inherit; }
   position: absolute; inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(ellipse 70% 60% at 25% 50%, rgba(5, 5, 15, 0.7), transparent 70%);
+  background: radial-gradient(ellipse 70% 60% at 25% 50%, rgb(var(--space-deep-rgb) / 0.7), transparent 70%);
 }
 .hero__title {
   font-family: var(--serif);
@@ -221,7 +227,7 @@ a { color: inherit; }
   letter-spacing: -0.025em;
   margin: 0 0 1.75rem;
   color: var(--bone);
-  text-shadow: 0 0 60px rgba(174, 246, 207, 0.35);
+  text-shadow: 0 0 60px rgb(var(--mint-rgb) / 0.35);
 }
 .hero__title span { font-style: normal; }
 .hero__sub {
@@ -229,8 +235,8 @@ a { color: inherit; }
   color: var(--muted);
   max-width: 46ch;
   margin: 0 0 2.5rem;
-  color: rgba(234, 255, 242, 0.9);
-  text-shadow: 0 1px 14px rgba(5, 5, 15, 0.9);
+  color: rgb(var(--bone-rgb) / 0.9);
+  text-shadow: 0 1px 14px rgb(var(--space-deep-rgb) / 0.9);
 }
 .hero__cta { display: flex; flex-wrap: wrap; gap: 0.9rem; justify-content: flex-start; }
 
@@ -263,7 +269,7 @@ a { color: inherit; }
 /* ===== Services (pinned) ===== */
 .services {
   position: relative;
-  background: linear-gradient(to bottom, transparent, rgba(5, 5, 15, 0.7) 20%, rgba(5, 5, 15, 0.7) 80%, transparent);
+  background: linear-gradient(to bottom, transparent, rgb(var(--space-deep-rgb) / 0.7) 20%, rgb(var(--space-deep-rgb) / 0.7) 80%, transparent);
 }
 .services__pin {
   height: 100vh;
@@ -302,7 +308,7 @@ a { color: inherit; }
 .card::before {
   content: "";
   position: absolute; inset: 0;
-  background: radial-gradient(420px circle at var(--mx) var(--my), rgba(174, 246, 207, 0.22), transparent 60%);
+  background: radial-gradient(420px circle at var(--mx) var(--my), rgb(var(--mint-rgb) / 0.22), transparent 60%);
   opacity: 0;
   transition: opacity var(--motion-300);
   pointer-events: none;
@@ -312,10 +318,10 @@ a { color: inherit; }
 .card > * { position: relative; }
 
 .card--work {
-  background: linear-gradient(160deg, rgba(199, 155, 255, 0.22), rgba(10, 10, 36, 0.7));
-  border-color: rgba(199, 155, 255, 0.35);
+  background: linear-gradient(160deg, rgb(var(--lilac-rgb) / 0.22), rgb(var(--space-rgb) / 0.7));
+  border-color: rgb(var(--lilac-rgb) / 0.35);
 }
-.card--work::before { background: radial-gradient(420px circle at var(--mx) var(--my), rgba(199, 155, 255, 0.3), transparent 60%); }
+.card--work::before { background: radial-gradient(420px circle at var(--mx) var(--my), rgb(var(--lilac-rgb) / 0.3), transparent 60%); }
 .card--work .card__example { color: var(--muted); }
 .card--work .btn--ghost { border-color: var(--jade); color: var(--jade); }
 .card--work .btn--ghost:hover { background: var(--jade); color: var(--space); }
@@ -325,9 +331,9 @@ a { color: inherit; }
   display: grid; place-items: center;
   color: var(--mint);
   border-radius: 14px;
-  background: rgba(174, 246, 207, 0.1);
+  background: rgb(var(--mint-rgb) / 0.1);
 }
-.card--work .card__icon { color: var(--jade); background: rgba(95, 230, 160, 0.14); }
+.card--work .card__icon { color: var(--jade); background: rgb(var(--jade-rgb) / 0.14); }
 .card__icon svg { width: 30px; height: 30px; }
 .card__num {
   font-family: var(--serif);
@@ -380,7 +386,7 @@ a { color: inherit; }
 .tile::after {
   content: "";
   position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(5, 5, 15, 0.9), rgba(5, 5, 15, 0) 55%);
+  background: linear-gradient(to top, rgb(var(--space-deep-rgb) / 0.9), rgb(var(--space-deep-rgb) / 0) 55%);
   z-index: 0;
 }
 .tile__meta {
@@ -409,7 +415,7 @@ a { color: inherit; }
   max-width: min(92vw, 520px);
   width: 100%;
 }
-.lightbox::backdrop { background: rgba(5, 5, 15, 0.82); }
+.lightbox::backdrop { background: rgb(var(--space-deep-rgb) / 0.82); }
 .lightbox__card {
   position: relative;
   background: var(--space-lift);
@@ -468,7 +474,7 @@ a { color: inherit; }
 /* ===== Contact ===== */
 .contact {
   position: relative;
-  background: linear-gradient(to bottom, rgba(5, 5, 15, 0.6), rgba(5, 5, 15, 0.92));
+  background: linear-gradient(to bottom, rgb(var(--space-deep-rgb) / 0.6), rgb(var(--space-deep-rgb) / 0.92));
   padding: clamp(5rem, 10vw, 8rem) clamp(1.25rem, 6vw, 6rem);
 }
 .contact__intro p:not(.eyebrow) { color: var(--muted); margin: 0 0 3rem; }
@@ -484,19 +490,19 @@ a { color: inherit; }
 .form input, .form select, .form textarea {
   font: inherit; font-size: 1rem;
   color: var(--bone);
-  background: rgba(174, 246, 207, 0.05);
-  border: 1px solid rgba(174, 246, 207, 0.25);
+  background: rgb(var(--mint-rgb) / 0.05);
+  border: 1px solid rgb(var(--mint-rgb) / 0.25);
   border-radius: 14px;
   padding: 0.9rem 1rem;
   transition: border-color var(--motion-300), background var(--motion-300), box-shadow var(--motion-300);
 }
 .form select option { color: var(--space); }
-.form [aria-invalid="true"] { border-color: var(--error); box-shadow: 0 0 0 4px rgba(199, 155, 255, 0.18); }
+.form [aria-invalid="true"] { border-color: var(--error); box-shadow: 0 0 0 4px rgb(var(--lilac-rgb) / 0.18); }
 .form input:focus, .form select:focus, .form textarea:focus {
   outline: none;
   border-color: var(--jade);
-  background: rgba(174, 246, 207, 0.1);
-  box-shadow: 0 0 0 4px rgba(95, 230, 160, 0.18);
+  background: rgb(var(--mint-rgb) / 0.1);
+  box-shadow: 0 0 0 4px rgb(var(--jade-rgb) / 0.18);
 }
 .form input:invalid:not(:placeholder-shown),
 .form select:invalid { border-color: var(--error); }
@@ -569,7 +575,7 @@ a { color: inherit; }
   border-radius: 6px;
   overflow: hidden;
   cursor: pointer;
-  border: 1px solid rgba(174, 246, 207, 0.25);
+  border: 1px solid rgb(var(--mint-rgb) / 0.25);
   box-shadow: 0 30px 60px -28px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   background: var(--space-lift);
   will-change: transform;
@@ -588,7 +594,7 @@ a { color: inherit; }
   font-weight: 600;
   color: var(--bone);
   text-align: left;
-  background: linear-gradient(to top, rgba(5, 5, 15, 0.92), rgba(5, 5, 15, 0));
+  background: linear-gradient(to top, rgb(var(--space-deep-rgb) / 0.92), rgb(var(--space-deep-rgb) / 0));
 }
 .deck__dots {
   position: absolute; left: 50%; bottom: -2.2rem;
@@ -597,7 +603,7 @@ a { color: inherit; }
 }
 .deck__dots span {
   width: 8px; height: 8px; border-radius: 50%;
-  background: rgba(174, 246, 207, 0.3);
+  background: rgb(var(--mint-rgb) / 0.3);
   transition: background var(--motion-300), transform var(--motion-300);
 }
 .deck__dots .is-active { background: var(--jade); transform: scale(1.3); }
