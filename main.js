@@ -440,7 +440,8 @@
   });
 
   /* ---------- Section-by-section scrolling (desktop: wheel and arrow keys) ---------- */
-  const SECTION_SELECTOR = "main > section, footer.footer";
+  // The client marquee is a band, not a stop: scrolling goes from the hero straight to services
+  const SECTION_SELECTOR = "main > section:not(.marquee), footer.footer";
   const lightboxEl = document.getElementById("lightbox");
   const maxScrollY = () => document.documentElement.scrollHeight - window.innerHeight;
   const clampY = (y) => Math.min(Math.max(y, 0), maxScrollY());
