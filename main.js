@@ -125,7 +125,7 @@
   /* ---------- Motion ---------- */
   const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const mm = gsap.matchMedia();
-  gsap.registerPlugin(ScrollTrigger, SplitText);
+  gsap.registerPlugin(ScrollTrigger, SplitText, ScrollToPlugin);
 
   function runHero() {
     const splitTarget = document.querySelector("[data-split] span");
@@ -437,6 +437,72 @@
         .set(wipe, { transformOrigin: "top" })
         .to(wipe, { scaleY: 0, duration: 0.7, ease: "power3.inOut", delay: 0.15 });
     });
+  });
+
+  /* ---------- Section-by-section scrolling (desktop: wheel and arrow keys) ---------- */
+  const SECTION_SELECTOR = "main > section, footer.footer";
+  const lightboxEl = document.getElementById("lightbox");
+  const maxScrollY = () => document.documentElement.scrollHeight - window.innerHeight;
+  const clampY = (y) => Math.min(Math.max(y, 0), maxScrollY());
+
+  // Pinned sections are measured through their pin spacer, which holds the real position
+  const measured = (el) => (el.parentElement && el.parentElement.classList.contains("pin-spacer") ? el.parentElement : el);
+  const pageTop = (el) => measured(el).getBoundingClientRect().top + window.scrollY;
+
+  // Where the page should rest for a section: centred if it fits on screen, top if it is taller
+  const restingY = (el) => {
+    const top = pageTop(el);
+    const height = measured(el).offsetHeight;
+    const y = height > window.innerHeight ? top : top - (window.innerHeight - height) / 2;
+    return clampY(y);
+  };
+
+  let moving = false;
+  let cooldownUntil = 0;
+
+  const goToSection = (direction) => {
+    if (moving || performance.now() < cooldownUntil) return;
+
+    const sections = [...document.querySelectorAll(SECTION_SELECTOR)];
+    const y = window.scrollY;
+    const EPS = 8;
+    const target = direction > 0
+      ? sections.map(restingY).find((rest) => rest > y + EPS)
+      : [...sections].reverse().map(restingY).find((rest) => rest < y - EPS);
+
+    if (target === undefined || Math.abs(target - y) < 2) return;
+
+    moving = true;
+    gsap.to(window, {
+      scrollTo: { y: target, autoKill: false },
+      duration: reduceMotion() ? 0 : 1.1,
+      ease: "power3.inOut",
+      onComplete: () => {
+        moving = false;
+        cooldownUntil = performance.now() + 700; // absorbs trackpad inertia
+      },
+    });
+  };
+
+  const sectionScrollEnabled = () =>
+    !reduceMotion() && window.matchMedia("(hover: hover) and (pointer: fine)").matches && !lightboxEl.open;
+
+  window.addEventListener("wheel", (e) => {
+    if (!sectionScrollEnabled() || e.ctrlKey) return;
+    if (e.target.closest("textarea, select")) return;
+    if (Math.abs(e.deltaY) < 4) return;
+    e.preventDefault();
+    goToSection(Math.sign(e.deltaY));
+  }, { passive: false });
+
+  window.addEventListener("keydown", (e) => {
+    if (!sectionScrollEnabled()) return;
+    if (e.target.closest("input, textarea, select, [contenteditable]")) return;
+    const down = ["ArrowDown", "PageDown", " "].includes(e.key);
+    const up = ["ArrowUp", "PageUp"].includes(e.key);
+    if (!down && !up) return;
+    e.preventDefault();
+    goToSection(down ? 1 : -1);
   });
 
   /* ---------- Contact form ---------- */

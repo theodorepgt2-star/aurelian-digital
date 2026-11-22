@@ -20,16 +20,9 @@
   --ease-out: cubic-bezier(.2, .7, .2, 1);
 }
 
-/* ===== Section snap: each section settles in the middle of the screen =====
-   "proximity" settles gently near a section, without trapping the scroll. */
-html { scroll-snap-type: y proximity; }
-.hero, .marquee, .services, .work, .why, .footer { scroll-snap-align: center; }
-/* Tall sections start at the top, since they do not fit on one screen */
-.contact { scroll-snap-align: start; }
-
 /* ===== Base ===== */
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; background: var(--space); }
+html { scroll-behavior: auto; background: var(--space); }
 body {
   margin: 0;
   /* No background here: it would paint over the starfield canvas. */
