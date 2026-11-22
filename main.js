@@ -161,18 +161,21 @@
     const track = document.getElementById("servicesTrack");
     const scrollDistance = () => Math.max(0, track.scrollWidth - window.innerWidth + 120);
 
-    gsap.to(track, {
-      x: () => -scrollDistance(),
-      ease: "none",
-      scrollTrigger: {
-        trigger: "#services",
-        start: "top top",
-        end: () => `+=${scrollDistance()}`,
-        pin: true,
-        scrub: 1,
-        invalidateOnRefresh: true,
-        anticipatePin: 1,
-      },
+    // Desktop only: on phones the track scrolls natively with a finger.
+    mm.add("(min-width: 761px)", () => {
+      gsap.to(track, {
+        x: () => -scrollDistance(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#services",
+          start: "top top",
+          end: () => `+=${scrollDistance()}`,
+          pin: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          anticipatePin: 1,
+        },
+      });
     });
 
     // Section titles reveal as they enter.
