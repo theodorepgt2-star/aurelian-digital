@@ -489,13 +489,27 @@
     !reduceMotion() && window.matchMedia("(hover: hover) and (pointer: fine)").matches && !lightboxEl.open;
 
   // While the services section is pinned, the wheel moves its track natively until the pin has no travel left
-  const pinnedCanScroll = (direction) => {
+  const pinnedBounds = () => {
     const services = document.getElementById("services");
-    const spacer = measured(services);
     const start = pageTop(services);
-    const end = start + spacer.offsetHeight - window.innerHeight;
+    return { start, end: start + measured(services).offsetHeight - window.innerHeight };
+  };
+
+  const pinnedCanScroll = (direction) => {
+    const { start, end } = pinnedBounds();
     if (window.scrollY < start - 2 || window.scrollY > end + 2) return false;
     return direction > 0 ? window.scrollY < end - 2 : window.scrollY > start + 2;
+  };
+
+  // Moves the services track to its far end (or back to its start) without leaving the section
+  const scrollPinnedTo = (direction) => {
+    const { start, end } = pinnedBounds();
+    gsap.killTweensOf(window);
+    gsap.to(window, {
+      scrollTo: { y: direction > 0 ? end : start, autoKill: false },
+      duration: reduceMotion() ? 0 : 1.4,
+      ease: "power2.inOut",
+    });
   };
 
   window.addEventListener("wheel", (e) => {
@@ -513,7 +527,10 @@
     const up = ["ArrowUp", "PageUp"].includes(e.key);
     if (!down && !up) return;
     e.preventDefault();
-    goToSection(down ? 1 : -1);
+    const direction = down ? 1 : -1;
+    // Inside the pinned services: first press reads the track to its end, next press leaves the section
+    if (pinnedCanScroll(direction)) scrollPinnedTo(direction);
+    else goToSection(direction);
   });
 
   /* ---------- Contact form ---------- */
