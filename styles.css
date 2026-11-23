@@ -635,7 +635,7 @@ a { color: inherit; }
 
 /* ===== Mobile ===== */
 @media (max-width: 760px) {
-  .site-header { flex-wrap: wrap; row-gap: 0.5rem; padding-top: 1rem; padding-bottom: 0.75rem; }
+  .site-header { flex-wrap: wrap; row-gap: 0.5rem; padding-top: 1rem; padding-bottom: 0.75rem; background: rgb(var(--space-rgb) / 0.97); border-bottom: 1px solid var(--line); }
   .nav {
     order: 3; width: 100%; overflow-x: auto; scrollbar-width: none;
     justify-content: space-between;
