@@ -371,7 +371,7 @@ a { color: inherit; }
   position: relative;
   display: flex;
   flex-direction: column;
-  background: var(--glass);
+  background: var(--space-lift);
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
