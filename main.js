@@ -562,7 +562,25 @@
       onComplete: () => {
         wheelBusy = false;
         cooldownUntil = performance.now() + 700; // absorbs trackpad inertia
+        settleWhy(target);
       },
+    });
+  };
+
+  // On phones the "why" list can end below the fold, so after a short pause the page continues down to show it
+  const settleWhy = (target) => {
+    const why = document.getElementById("why");
+    if (!why || reduceMotion() || Math.abs(restingY(why) - target) > 2) return;
+    if (!window.matchMedia("(pointer: coarse)").matches) return;
+    const last = why.querySelector(".why__item:last-child");
+    if (!last) return;
+    const need = last.getBoundingClientRect().bottom - window.innerHeight + 24;
+    if (need <= 0) return;
+    gsap.delayedCall(1, () => {
+      gsap.to(window, {
+        scrollTo: { y: clampY(window.scrollY + need), autoKill: false },
+        duration: 1.2, ease: "power2.inOut",
+      });
     });
   };
 
