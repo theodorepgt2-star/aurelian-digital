@@ -596,7 +596,7 @@
   window.addEventListener("wheel", (e) => {
     if (!sectionScrollEnabled() || e.ctrlKey) return;
     if (e.target.closest("textarea, select, #contactForm")) return;
-    if (Math.abs(e.deltaY) < 4 || pinnedCanScroll(Math.sign(e.deltaY))) return;
+    if (e.deltaY === 0 || pinnedCanScroll(Math.sign(e.deltaY))) return; // trackpads send tiny deltas too
     e.preventDefault();
     goToSection(Math.sign(e.deltaY), true);
   }, { passive: false });
