@@ -278,9 +278,14 @@ a { color: inherit; }
   gap: 2.5rem;
   padding: 6rem 0 3rem;
   overflow: hidden;
+  /* One soft-cornered jade frame around the whole services panel */
+  margin-inline: clamp(0.75rem, 2.5vw, 2rem);
+  background: rgb(var(--space-deep-rgb) / 0.55);
+  border: 1px solid var(--jade);
+  border-radius: var(--radius);
+  box-shadow: 0 0 32px rgb(var(--jade-rgb) / 0.45);
 }
 /* A solid band behind the card track keeps the cards readable over the starfield */
-.services__track { background: rgb(var(--space-deep-rgb) / 0.55); border-block: 1px solid var(--jade); box-shadow: 0 0 32px rgb(var(--jade-rgb) / 0.45); }
 /* Every service card in the track gets a full jade outline */
 .services__track .card { border: 1px solid var(--jade); }
 .services__head { padding: 0 clamp(1.25rem, 6vw, 6rem); }
