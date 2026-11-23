@@ -647,7 +647,7 @@
     const dx = Math.abs(swipeStartX - e.touches[0].clientX);
     const dy = Math.abs(swipeStartY - e.touches[0].clientY);
     if (!swipeAxis && Math.max(dx, dy) > 8) swipeAxis = dy > dx ? "vertical" : "horizontal";
-    if (swipeAxis === "horizontal") { swipeStartY = null; return; } // the services track scrolls natively
+    if (swipeAxis === "horizontal") return; // the services track scrolls natively; touchend decides by the final displacement
     if (swipeAxis === "vertical") e.preventDefault(); // we move the page ourselves on release
   }, { passive: false });
 
