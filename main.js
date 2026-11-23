@@ -635,6 +635,7 @@
 
   window.addEventListener("touchstart", (e) => {
     swipeStartY = null;
+    swipeAxis = null; // a gesture that ended without touchend must not leave its axis behind
     if (!touchSectionsEnabled() || e.touches.length !== 1) return;
     if (e.target.closest("input, textarea, select, [contenteditable], #contactForm")) return;
     swipeStartX = e.touches[0].clientX;
@@ -650,6 +651,11 @@
     if (swipeAxis === "horizontal") return; // the services track scrolls natively; touchend decides by the final displacement
     if (swipeAxis === "vertical") e.preventDefault(); // we move the page ourselves on release
   }, { passive: false });
+
+  window.addEventListener("touchcancel", () => {
+    swipeStartY = null;
+    swipeAxis = null;
+  });
 
   window.addEventListener("touchend", (e) => {
     if (swipeStartY === null) return;
