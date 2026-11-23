@@ -173,7 +173,6 @@ a { color: inherit; }
   border: 1px solid transparent;
   cursor: pointer;
   transition: transform var(--motion-300) var(--ease-out), background var(--motion-300), color var(--motion-300), box-shadow var(--motion-300);
-  will-change: transform;
 }
 .btn:hover { transform: translateY(-2px); }
 .btn--primary {
@@ -578,7 +577,6 @@ a { color: inherit; }
   border: 1px solid rgb(var(--mint-rgb) / 0.25);
   box-shadow: 0 30px 60px -28px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   background: var(--space-lift);
-  will-change: transform;
 }
 .deck__card:focus-visible { outline: 2px solid var(--jade); outline-offset: 4px; }
 .deck__media { position: absolute; inset: 0; display: block; }
