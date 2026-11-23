@@ -381,7 +381,7 @@ a { color: inherit; }
   position: absolute; inset: 0;
   transition: transform var(--motion-300) var(--ease-out);
 }
-.tile__art--1 { background: radial-gradient(120% 90% at 20% 10%, #5fe6a0 0%, #13133a 55%, #05050f 100%); }
+.tile__art--1 { background: url("assets/previews/olga.jpg") center / cover no-repeat; }
 .tile__art--2 { background: radial-gradient(120% 90% at 80% 20%, #c79bff 0%, #2a1a5e 50%, #05050f 100%); }
 .tile__art--3 { background: radial-gradient(120% 90% at 50% 100%, #aee9ff 0%, #13133a 60%, #05050f 100%); }
 .tile::after {
