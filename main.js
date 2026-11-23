@@ -145,6 +145,8 @@
 
   mm.add("(prefers-reduced-motion: no-preference)", () => {
     runHero();
+    // Web fonts change line breaks and heights; recompute trigger positions once they are in
+    document.fonts.ready.then(() => ScrollTrigger.refresh());
 
 
     // Hero content drifts up and fades as you scroll past it.
