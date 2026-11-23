@@ -376,7 +376,7 @@ a { color: inherit; }
   cursor: pointer;
   position: relative;
   display: block;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1200 / 578; /* same ratio as the screenshot */
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
@@ -579,14 +579,14 @@ a { color: inherit; }
   margin-top: 2.5rem;
 }
 .deck__card {
-  --cw: clamp(200px, 22vw, 300px);
+  --cw: clamp(280px, 36vw, 560px);
   all: unset;
   position: absolute;
   /* Pivot at the bottom-left corner: cards fan out to the right from here */
   left: 18%; top: 72%;
   transform-origin: 0% 100%;
   width: var(--cw);
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1200 / 578; /* same ratio as the screenshot, so it shows whole */
   border-radius: 6px;
   overflow: hidden;
   cursor: pointer;
