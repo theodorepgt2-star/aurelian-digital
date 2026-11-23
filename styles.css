@@ -380,22 +380,17 @@ a { color: inherit; }
 }
 .tile:focus-visible { outline: 2px solid var(--jade); outline-offset: 4px; }
 .tile__art {
-  position: absolute; inset: 0;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1200 / 578;
   transition: transform var(--motion-300) var(--ease-out);
 }
-.tile__art--1 { background: var(--space-lift) url("assets/previews/olga.jpg") center / cover no-repeat; }
+.tile__art--1 { background: var(--space-lift) url("assets/previews/olga.jpg") center / contain no-repeat; }
 .tile__art--2 { background: radial-gradient(120% 90% at 80% 20%, #c79bff 0%, #2a1a5e 50%, #05050f 100%); }
 .tile__art--3 { background: radial-gradient(120% 90% at 50% 100%, #aee9ff 0%, #13133a 60%, #05050f 100%); }
-.tile::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgb(var(--space-deep-rgb) / 0.9), rgb(var(--space-deep-rgb) / 0) 40%);
-  z-index: 0;
-}
 .tile__meta {
-  position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
   display: grid; gap: 0.3rem;
-  padding: 1.6rem;
+  padding: 1.25rem 1.5rem 1.5rem;
   color: var(--bone);
   text-align: left;
   transform: translateY(6px);
