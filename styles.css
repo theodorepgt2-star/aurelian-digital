@@ -669,3 +669,9 @@ a { color: inherit; }
   .grain, .curtain, .wipe, .btn::after { display: none; }
   .marquee__track { transform: none !important; }
 }
+
+/* Phones: the preview deck sits right under the hero text, not at the bottom of the screen */
+@media (max-width: 760px) {
+  .deck { height: clamp(300px, 56vh, 460px); margin-top: 1.5rem; }
+  .deck__card { --cw: min(78vw, 340px); left: 10%; top: 62%; }
+}
