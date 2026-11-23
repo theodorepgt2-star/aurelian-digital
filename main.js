@@ -570,9 +570,11 @@
   const navigate = (direction, fromWheel = false) => {
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
     if (isTouch && direction > 0 && deckControls && deckControls.isClosed()) {
+      document.body.classList.add("deck-up"); // the hero blurs, the previews come forward
       deckControls.open();
       return;
     }
+    document.body.classList.remove("deck-up");
     goToSection(direction, fromWheel);
   };
 

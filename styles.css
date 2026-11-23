@@ -675,3 +675,19 @@ a { color: inherit; }
   .deck { height: clamp(300px, 56vh, 460px); margin-top: 1.5rem; }
   .deck__card { --cw: min(78vw, 340px); left: 10%; top: 62%; }
 }
+
+/* Phones: the first move lifts the preview deck above a blurred hero (class added by main.js) */
+#deckScrim {
+  position: fixed; inset: 0; z-index: 55;
+  background: rgb(var(--space-deep-rgb) / 0.6);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  opacity: 0; pointer-events: none;
+  transition: opacity var(--motion-300) var(--ease-out);
+}
+.deck-up #deckScrim { opacity: 1; }
+.deck-up .deck {
+  position: fixed; left: 0; right: 0; top: 50%;
+  height: min(56vh, 460px); margin: 0;
+  transform: translateY(-50%); z-index: 60;
+}
