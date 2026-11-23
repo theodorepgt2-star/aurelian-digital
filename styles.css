@@ -387,7 +387,7 @@ a { color: inherit; }
 .tile::after {
   content: "";
   position: absolute; inset: 0;
-  background: linear-gradient(to top, rgb(var(--space-deep-rgb) / 0.9), rgb(var(--space-deep-rgb) / 0) 55%);
+  background: linear-gradient(to top, rgb(var(--space-deep-rgb) / 0.9), rgb(var(--space-deep-rgb) / 0) 40%);
   z-index: 0;
 }
 .tile__meta {
@@ -404,7 +404,7 @@ a { color: inherit; }
 }
 .tile__name { font-family: var(--serif); font-size: 2rem; font-weight: 600; line-height: 1.05; }
 .tile:hover .tile__art,
-.tile:focus-visible .tile__art { transform: scale(1.06); }
+.tile:focus-visible .tile__art { transform: none; } /* no zoom: the whole screenshot stays visible */
 .tile:hover .tile__meta,
 .tile:focus-visible .tile__meta { transform: translateY(0); }
 
