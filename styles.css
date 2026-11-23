@@ -389,8 +389,8 @@ a { color: inherit; }
 .tile__art--2 { background: radial-gradient(120% 90% at 80% 20%, #c79bff 0%, #2a1a5e 50%, #05050f 100%); }
 .tile__art--3 { background: radial-gradient(120% 90% at 50% 100%, #aee9ff 0%, #13133a 60%, #05050f 100%); }
 .tile__meta {
-  display: grid; gap: 0.3rem;
-  padding: 1.25rem 1.5rem 1.5rem;
+  display: grid; gap: 0.5rem;
+  padding: 1rem 1.5rem 1.5rem;
   color: var(--bone);
   text-align: left;
   transform: translateY(6px);
