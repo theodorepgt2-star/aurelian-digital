@@ -497,7 +497,7 @@ a { color: inherit; }
   font: inherit; font-size: 1rem;
   color: var(--bone);
   background: rgb(var(--mint-rgb) / 0.05);
-  border: 1px solid rgb(var(--mint-rgb) / 0.25);
+  border: 1px solid rgb(var(--jade-rgb) / 0.6);
   border-radius: 14px;
   padding: 1rem 1rem;
   transition: border-color var(--motion-300), background var(--motion-300), box-shadow var(--motion-300);
