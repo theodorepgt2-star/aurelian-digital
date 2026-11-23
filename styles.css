@@ -89,7 +89,7 @@ a { color: inherit; }
 }
 
 .eyebrow {
-  display: inline-flex; align-items: center; gap: 0.6rem;
+  display: inline-flex; align-items: center; gap: 0.5rem;
   font-size: 0.78rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -119,7 +119,7 @@ a { color: inherit; }
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  padding: 1.1rem clamp(1.25rem, 4vw, 3rem);
+  padding: 1rem clamp(1.25rem, 4vw, 3rem);
   background: linear-gradient(to bottom, rgb(var(--space-rgb) / 0.85), transparent);
 }
 .logo {
@@ -152,7 +152,7 @@ a { color: inherit; }
   font: inherit; font-size: 0.8rem; font-weight: 700;
   letter-spacing: 0.1em;
   min-height: 44px; min-width: 44px;
-  padding: 0.45rem 0.9rem;
+  padding: 0.5rem 1rem;
   border: 1px solid var(--mint);
   background: transparent;
   color: var(--mint);
@@ -167,7 +167,7 @@ a { color: inherit; }
   position: relative; isolation: isolate;
   display: inline-flex; align-items: center; justify-content: center;
   font: inherit; font-weight: 700; font-size: 0.95rem;
-  padding: 1rem 1.7rem;
+  padding: 1rem 1.75rem;
   border-radius: 999px;
   text-decoration: none;
   border: 1px solid transparent;
@@ -238,7 +238,7 @@ a { color: inherit; }
   color: rgb(var(--bone-rgb) / 0.9);
   text-shadow: 0 1px 14px rgb(var(--space-deep-rgb) / 0.9);
 }
-.hero__cta { display: flex; flex-wrap: wrap; gap: 0.9rem; justify-content: flex-start; }
+.hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: flex-start; }
 
 .scroll-cue {
   position: absolute; left: 50%; bottom: 2rem; translate: -50% 0;
@@ -295,8 +295,8 @@ a { color: inherit; }
   min-height: 360px;
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
-  padding: 2.2rem;
+  gap: 1rem;
+  padding: 2.25rem;
   background: var(--glass);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -422,7 +422,7 @@ a { color: inherit; }
   color: var(--bone);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 2.6rem 2.2rem 2.2rem;
+  padding: 2.5rem 2.25rem 2.25rem;
   display: grid; gap: 1rem;
   box-shadow: var(--shadow);
 }
@@ -482,10 +482,10 @@ a { color: inherit; }
 .form {
   max-width: 780px;
   display: grid;
-  gap: 1.4rem;
+  gap: 1.5rem;
   position: relative;
 }
-.form__row { display: grid; gap: 1.4rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.form__row { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 .form label { display: grid; gap: 0.5rem; font-size: 0.85rem; letter-spacing: 0.05em; color: var(--muted); }
 .form input, .form select, .form textarea {
   font: inherit; font-size: 1rem;
@@ -493,7 +493,7 @@ a { color: inherit; }
   background: rgb(var(--mint-rgb) / 0.05);
   border: 1px solid rgb(var(--mint-rgb) / 0.25);
   border-radius: 14px;
-  padding: 0.9rem 1rem;
+  padding: 1rem 1rem;
   transition: border-color var(--motion-300), background var(--motion-300), box-shadow var(--motion-300);
 }
 .form select option { color: var(--space); }
@@ -588,7 +588,7 @@ a { color: inherit; }
 .deck__art--3 { background: radial-gradient(120% 90% at 50% 100%, #aee9ff 0%, #13133a 60%, #05050f 100%); }
 .deck__name {
   position: absolute; left: 0; right: 0; bottom: 0;
-  padding: 2.2rem 1.2rem 1rem;
+  padding: 2.25rem 1.25rem 1rem;
   font-family: var(--serif);
   font-size: clamp(1.3rem, 2vw, 1.6rem);
   font-weight: 600;
@@ -628,17 +628,17 @@ a { color: inherit; }
 
 /* ===== Mobile ===== */
 @media (max-width: 760px) {
-  .site-header { flex-wrap: wrap; row-gap: 0.6rem; padding-top: 0.9rem; padding-bottom: 0.7rem; }
+  .site-header { flex-wrap: wrap; row-gap: 0.5rem; padding-top: 1rem; padding-bottom: 0.75rem; }
   .nav {
     order: 3; width: 100%; overflow-x: auto; scrollbar-width: none;
     justify-content: space-between;
-    gap: 0.6rem;
+    gap: 0.5rem;
     font-size: 0.82rem;
   }
   .nav a { white-space: nowrap; }
   .hero { padding-top: 9.5rem; }
   .hero__title { font-size: clamp(2.8rem, 13vw, 4rem); }
-  .btn { padding: 0.9rem 1.3rem; }
+  .btn { padding: 1rem 1.25rem; }
   .hero { padding: 9.5rem 1.25rem 6rem; }
   .hero__title { font-size: clamp(2.7rem, 12.5vw, 3.8rem); line-height: 1; }
   .hero__sub { font-size: 1.08rem; line-height: 1.65; }
