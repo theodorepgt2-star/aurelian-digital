@@ -542,6 +542,9 @@ a { color: inherit; }
   color: var(--muted);
   font-size: 0.9rem;
 }
+.stroke-mark { display: block; width: 100%; height: auto; overflow: visible; }
+.stroke-mark__stroke { fill: none; stroke: var(--jade); stroke-opacity: 0.4; stroke-linejoin: round; stroke-linecap: round; }
+.stroke-mark__fill { fill: var(--mint); }
 .footer__mark {
   flex-basis: 100%;
   font-family: var(--serif);

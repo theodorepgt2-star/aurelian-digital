@@ -222,6 +222,85 @@
     // Page transition: the dark curtain lifts to reveal the page.
     gsap.to(".curtain", { yPercent: -100, duration: 1.2, ease: "expo.inOut", delay: 0.15 });
 
+    // Footer wordmark: the outline draws in per letter, then a soft mint wipe fills it (toned down to ~40%).
+    const mark = document.querySelector(".footer__mark");
+    if (mark) {
+      const NS = "http://www.w3.org/2000/svg";
+      const word = mark.textContent.trim();
+      const style = getComputedStyle(mark);
+      const fontPx = parseFloat(style.fontSize);
+      const svg = document.createElementNS(NS, "svg");
+      svg.setAttribute("class", "stroke-mark");
+      svg.setAttribute("aria-hidden", "true");
+      const clipId = "strokeMarkWipe";
+      const defs = document.createElementNS(NS, "defs");
+      const clip = document.createElementNS(NS, "clipPath");
+      clip.setAttribute("id", clipId);
+      clip.setAttribute("clipPathUnits", "userSpaceOnUse");
+      const wipeRect = document.createElementNS(NS, "rect");
+      clip.appendChild(wipeRect);
+      defs.appendChild(clip);
+      svg.appendChild(defs);
+
+      const outline = document.createElementNS(NS, "text");
+      outline.setAttribute("x", "0");
+      outline.setAttribute("y", "0");
+      outline.setAttribute("class", "stroke-mark__stroke");
+      outline.setAttribute("stroke-width", String(fontPx * 0.012));
+      const fill = document.createElementNS(NS, "text");
+      fill.setAttribute("x", "0");
+      fill.setAttribute("y", "0");
+      fill.setAttribute("class", "stroke-mark__fill");
+      fill.setAttribute("clip-path", `url(#${clipId})`);
+
+      const applyFont = (node) => {
+        node.style.fontFamily = style.fontFamily;
+        node.style.fontSize = style.fontSize;
+        node.style.fontWeight = style.fontWeight;
+        node.style.letterSpacing = style.letterSpacing;
+      };
+      applyFont(outline);
+      applyFont(fill);
+
+      const letters = [...word];
+      const dash = fontPx * 7;
+      const strokes = letters.map((ch) => {
+        const span = document.createElementNS(NS, "tspan");
+        span.textContent = ch;
+        span.style.strokeDasharray = `${dash}`;
+        span.style.strokeDashoffset = `${dash}`;
+        outline.appendChild(span);
+        return span;
+      });
+      letters.forEach((ch) => {
+        const span = document.createElementNS(NS, "tspan");
+        span.textContent = ch;
+        fill.appendChild(span);
+      });
+
+      svg.appendChild(outline);
+      svg.appendChild(fill);
+      mark.textContent = "";
+      mark.appendChild(svg);
+
+      document.fonts.ready.then(() => {
+        const box = outline.getBBox();
+        const pad = fontPx * 0.06;
+        const vb = { x: box.x - pad, y: box.y - pad, w: box.width + pad * 2, h: box.height + pad * 2 };
+        svg.setAttribute("viewBox", `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+        wipeRect.setAttribute("x", vb.x);
+        wipeRect.setAttribute("y", vb.y);
+        wipeRect.setAttribute("height", vb.h);
+        wipeRect.setAttribute("width", 0);
+
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: mark, start: "top 90%", once: true },
+        });
+        tl.to(strokes, { strokeDashoffset: 0, duration: 1.6, ease: "power2.out", stagger: 0.05 })
+          .to(wipeRect, { attr: { width: vb.w }, duration: 0.8, ease: "power2.inOut" }, "+=0.2");
+      });
+    }
+
     // Footer wordmark fades in as the footer scrolls into view.
     gsap.fromTo(".footer__mark",
       { opacity: 0.05, yPercent: 30 },
