@@ -92,16 +92,16 @@
 
   const isEN = () => html.lang === "en";
   const dict = () => (isEN() ? { ...EN, ...EN_EXTRA } : GR);
-  const t = (key) => dict()[key] || key;
+  const translate = (key) => dict()[key] || key;
 
   function setLang(lang) {
-    const d = lang === "en" ? { ...EN, ...EN_EXTRA } : GR;
+    const strings = lang === "en" ? { ...EN, ...EN_EXTRA } : GR;
     document.querySelectorAll("[data-i18n]").forEach((el) => {
-      const value = d[el.dataset.i18n];
+      const value = strings[el.dataset.i18n];
       if (value !== undefined) el.textContent = value;
     });
     document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
-      const value = d[el.dataset.i18nAria];
+      const value = strings[el.dataset.i18nAria];
       if (value !== undefined) el.setAttribute("aria-label", value);
     });
     html.lang = lang === "en" ? "en" : "el";
@@ -238,15 +238,15 @@
       const GLOW_RADIUS = 140;
       const buttons = [...document.querySelectorAll(".btn")];
       let frame = 0;
-      let px = -9999;
-      let py = -9999;
+      let pointerX = -9999;
+      let pointerY = -9999;
 
       const update = () => {
         frame = 0;
         buttons.forEach((btn) => {
           const r = btn.getBoundingClientRect();
-          const dx = Math.max(r.left - px, 0, px - r.right);
-          const dy = Math.max(r.top - py, 0, py - r.bottom);
+          const dx = Math.max(r.left - pointerX, 0, pointerX - r.right);
+          const dy = Math.max(r.top - pointerY, 0, pointerY - r.bottom);
           const dist = Math.hypot(dx, dy);
           const glow = Math.max(0, 1 - dist / GLOW_RADIUS);
           btn.style.setProperty("--glow", glow.toFixed(3));
@@ -254,13 +254,13 @@
       };
 
       window.addEventListener("pointermove", (e) => {
-        px = e.clientX;
-        py = e.clientY;
+        pointerX = e.clientX;
+        pointerY = e.clientY;
         if (!frame) frame = requestAnimationFrame(update);
       });
       window.addEventListener("pointerleave", () => {
-        px = -9999;
-        py = -9999;
+        pointerX = -9999;
+        pointerY = -9999;
         if (!frame) frame = requestAnimationFrame(update);
       });
     }
@@ -289,11 +289,11 @@
 
   document.querySelectorAll(".tile").forEach((tile) => {
     tile.addEventListener("click", () => {
-      const d = dict();
+      const labels = dict();
       const titleKey = tile.dataset.i18nTitle;
       const descKey = tile.dataset.i18nDesc;
-      lbTitle.textContent = (titleKey && d[titleKey]) || tile.dataset.title;
-      lbDesc.textContent = (descKey && d[descKey]) || tile.dataset.desc;
+      lbTitle.textContent = (titleKey && labels[titleKey]) || tile.dataset.title;
+      lbDesc.textContent = (descKey && labels[descKey]) || tile.dataset.desc;
 
       if (tile.dataset.url) {
         lbLink.href = tile.dataset.url;
@@ -321,15 +321,15 @@
     const FRONT_X = -50;     // px the front card moves to the left when the row opens
     const OPEN_DELAY = 3;    // seconds the stack stays closed before it opens
     let order = cards.slice(); // order[0] is the front card
-    let opened = false;
-    let busy = false;
+    let isDeckOpen = false;
+    let isDeckBusy = false;
 
     cards.forEach(() => dotsWrap.appendChild(document.createElement("span")));
     const dotEls = [...dotsWrap.children];
 
     const markDots = () => {
       const frontIndex = cards.indexOf(order[0]);
-      dotEls.forEach((d, i) => d.classList.toggle("is-active", i === frontIndex));
+      dotEls.forEach((dot, i) => dot.classList.toggle("is-active", i === frontIndex));
     };
 
     // Slot 0: front card, moved left and on top.
@@ -365,14 +365,14 @@
     };
 
     const open = () => {
-      opened = true;
+      isDeckOpen = true;
       place(true);
     };
 
     // Clicking the front card sends it left and out, then it returns at the back of the fan
     const advance = () => {
-      if (busy || !opened) return;
-      busy = true;
+      if (isDeckBusy || !isDeckOpen) return;
+      isDeckBusy = true;
       const front = order[0];
       gsap.to(front, {
         x: "-=260", opacity: 0,
@@ -382,7 +382,7 @@
           order.push(front);
           gsap.set(front, { x: xFor(order.length - 1), opacity: 0 });
           place(true);
-          busy = false;
+          isDeckBusy = false;
         },
       });
     };
@@ -403,7 +403,7 @@
 
   /* ---------- Section transitions: wipe out, jump, wipe in ---------- */
   const wipe = document.querySelector(".wipe");
-  let transitioning = false;
+  let isTransitioning = false;
 
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", (e) => {
@@ -412,17 +412,17 @@
       const id = link.getAttribute("href").slice(1);
       const target = id ? document.getElementById(id) : null;
       if (id && !target) return;
-      if (transitioning) {
+      if (isTransitioning) {
         e.preventDefault();
         return;
       }
 
       e.preventDefault();
-      transitioning = true;
+      isTransitioning = true;
 
       const top = target ? target.getBoundingClientRect().top + window.scrollY : 0;
 
-      gsap.timeline({ onComplete: () => { transitioning = false; } })
+      gsap.timeline({ onComplete: () => { isTransitioning = false; } })
         .set(wipe, { transformOrigin: "bottom" })
         .to(wipe, { scaleY: 1, duration: 0.55, ease: "power3.inOut" })
         .add(() => {
@@ -571,34 +571,34 @@
     input.addEventListener("input", () => input.removeAttribute("aria-invalid"));
   });
 
-  let sending = false;
+  let isSending = false;
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const fd = new FormData(form);
+    const formData = new FormData(form);
 
     // Honeypot: bots fill hidden fields, humans do not.
-    if (fd.get("website")) return;
+    if (formData.get("website")) return;
 
     const data = {
-      name: String(fd.get("name") || ""),
-      phone: String(fd.get("phone") || ""),
-      project_type: String(fd.get("project_type") || "other"),
-      budget: String(fd.get("budget") || "unsure"),
-      message: String(fd.get("message") || "").trim() || null,
+      name: String(formData.get("name") || ""),
+      phone: String(formData.get("phone") || ""),
+      project_type: String(formData.get("project_type") || "other"),
+      budget: String(formData.get("budget") || "unsure"),
+      message: String(formData.get("message") || "").trim() || null,
     };
 
     if (!validate(data)) {
       // Send the visitor to the first field that needs fixing, instead of a dead click
       const firstInvalid = Object.keys(fieldRules).find((name) => !fieldRules[name](form.elements[name].value));
       form.elements[firstInvalid]?.focus();
-      showStatus(t("form.invalid"), true);
+      showStatus(translate("form.invalid"), true);
       return;
     }
 
     // The button stays clickable; a flag stops double sends instead of disabling it
-    if (sending) return;
-    sending = true;
+    if (isSending) return;
+    isSending = true;
     showStatus("…", false);
 
     try {
@@ -613,12 +613,12 @@
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       form.reset();
-      showStatus(t("form.ok"), false);
+      showStatus(translate("form.ok"), false);
     } catch (err) {
-      showStatus(t("form.err"), true);
+      showStatus(translate("form.err"), true);
       console.error(err);
     } finally {
-      sending = false;
+      isSending = false;
     }
   });
 })();
