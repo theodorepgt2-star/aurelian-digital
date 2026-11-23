@@ -399,6 +399,7 @@
     const dotsWrap = document.getElementById("deckDots");
     const FIRST_GAP = 90;    // px from the front card to the second card
     const FRONT_X = -50;     // px the front card moves to the left when the row opens
+    const OPEN_DELAY = 3;    // seconds the stack stays closed before it opens (desktop)
     let order = cards.slice(); // order[0] is the front card
     let isDeckOpen = false;
     let isDeckBusy = false;
@@ -474,7 +475,9 @@
 
     stack();
     deckControls = { isClosed: () => !opened, open };
-    if (reduceMotion()) open(); // otherwise the first scroll from the hero opens it
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    if (reduceMotion()) open();
+    else if (!isTouch) gsap.delayedCall(OPEN_DELAY, open); // desktop: opens by itself; phones: on the first move
   }
 
   /* ---------- Section transitions: wipe out, jump, wipe in ---------- */
@@ -565,7 +568,8 @@
 
   // A downward move from the hero first opens the preview deck; the next move goes to the next section
   const navigate = (direction, fromWheel = false) => {
-    if (direction > 0 && deckControls && deckControls.isClosed()) {
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    if (isTouch && direction > 0 && deckControls && deckControls.isClosed()) {
       deckControls.open();
       return;
     }
