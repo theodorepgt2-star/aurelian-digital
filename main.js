@@ -614,6 +614,34 @@
     else goToSection(direction);
   });
 
+  /* ---------- Section-by-section swipes (touch screens) ---------- */
+  // A vertical swipe moves one section; horizontal swipes (the services cards) and the form stay native.
+  let swipeStartY = null;
+  let swipeStartX = null;
+  const touchSectionsEnabled = () =>
+    !reduceMotion() && window.matchMedia("(pointer: coarse)").matches && !lightboxEl.open;
+
+  window.addEventListener("touchstart", (e) => {
+    swipeStartY = null;
+    if (!touchSectionsEnabled() || e.touches.length !== 1) return;
+    if (e.target.closest("input, textarea, select, [contenteditable], #contactForm, .services__track")) return;
+    swipeStartX = e.touches[0].clientX;
+    swipeStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener("touchmove", (e) => {
+    if (swipeStartY !== null) e.preventDefault(); // we move the page ourselves on release
+  }, { passive: false });
+
+  window.addEventListener("touchend", (e) => {
+    if (swipeStartY === null) return;
+    const dy = swipeStartY - e.changedTouches[0].clientY;
+    const dx = swipeStartX - e.changedTouches[0].clientX;
+    swipeStartY = null;
+    if (Math.abs(dy) < 40 || Math.abs(dx) > Math.abs(dy)) return;
+    goToSection(dy > 0 ? 1 : -1);
+  });
+
   /* ---------- Contact form ---------- */
   const form = document.getElementById("contactForm");
   const status = document.getElementById("formStatus");
