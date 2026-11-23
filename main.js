@@ -474,7 +474,7 @@
     });
 
     stack();
-    deckControls = { isClosed: () => !opened, open };
+    deckControls = { isClosed: () => !isDeckOpen, open };
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
     if (reduceMotion()) open();
     else if (!isTouch) gsap.delayedCall(OPEN_DELAY, open); // desktop: opens by itself; phones: on the first move
