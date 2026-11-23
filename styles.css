@@ -279,6 +279,8 @@ a { color: inherit; }
   padding: 6rem 0 3rem;
   overflow: hidden;
 }
+/* A solid band behind the card track keeps the cards readable over the starfield */
+.services__track { background: rgb(var(--space-deep-rgb) / 0.55); border-block: 1px solid var(--line); }
 .services__head { padding: 0 clamp(1.25rem, 6vw, 6rem); }
 .services__head .section-title { margin: 0; }
 .services__track {
@@ -483,6 +485,11 @@ a { color: inherit; }
   display: grid;
   gap: 1.5rem;
   position: relative;
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 .form__row { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 .form label { display: grid; gap: 0.5rem; font-size: 0.85rem; letter-spacing: 0.05em; color: var(--muted); }
