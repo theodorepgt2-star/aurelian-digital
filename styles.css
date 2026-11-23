@@ -656,7 +656,8 @@ a { color: inherit; }
   .tile__name { font-size: 1.8rem; }
   .services__pin { height: auto; min-height: 100vh; padding: 5rem 0 3rem; }
   .services__track { overflow-x: auto; width: auto; scroll-snap-type: x mandatory; }
-  .card { scroll-snap-align: start; }
+  .card { scroll-snap-align: start; flex: 0 0 auto; width: min(78vw, 340px); }
+  .services__track { padding-inline: 1.25rem; }
 }
 
 /* ===== Reduced motion: no travel, everything visible ===== */
