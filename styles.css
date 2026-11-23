@@ -13,7 +13,7 @@
   --jade: #5fe6a0;
   --bone: #eafff2;
   --lilac: #c79bff;
-  --error: #ffb4a2;
+  --error: var(--jade);
   --sky: #aee9ff;
   --muted: rgb(var(--bone-rgb) / 0.84);
   --line: rgb(var(--mint-rgb) / 0.18);
