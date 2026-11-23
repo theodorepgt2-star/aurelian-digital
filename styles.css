@@ -281,6 +281,8 @@ a { color: inherit; }
 }
 /* A solid band behind the card track keeps the cards readable over the starfield */
 .services__track { background: rgb(var(--space-deep-rgb) / 0.55); border-block: 1px solid var(--jade); box-shadow: 0 0 32px rgb(var(--jade-rgb) / 0.45); }
+/* Every service card in the track gets a full jade outline */
+.services__track .card { border: 1px solid var(--jade); }
 .services__head { padding: 0 clamp(1.25rem, 6vw, 6rem); }
 .services__head .section-title { margin: 0; }
 .services__track {
@@ -487,9 +489,11 @@ a { color: inherit; }
   position: relative;
   padding: clamp(1.5rem, 4vw, 2.75rem);
   background: var(--glass);
-  border: 1px solid var(--line);
+  border: 1px solid var(--jade);
+  outline: 1px solid var(--jade);
+  outline-offset: 6px;
   border-radius: var(--radius);
-  box-shadow: var(--shadow), 0 0 0 1px var(--jade), 0 0 32px rgb(var(--jade-rgb) / 0.45);
+  box-shadow: var(--shadow), 0 0 32px rgb(var(--jade-rgb) / 0.45);
 }
 .form__row { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 .form label { display: grid; gap: 0.5rem; font-size: 0.85rem; letter-spacing: 0.05em; color: var(--muted); }
