@@ -392,13 +392,13 @@
   });
 
   /* ---------- Hero preview deck: a stack that opens into a fan ---------- */
+  let deckControls = null; // lets the first scroll from the hero open the deck
   const deck = document.getElementById("deck");
   if (deck) {
     const cards = [...deck.querySelectorAll(".deck__card")];
     const dotsWrap = document.getElementById("deckDots");
     const FIRST_GAP = 90;    // px from the front card to the second card
     const FRONT_X = -50;     // px the front card moves to the left when the row opens
-    const OPEN_DELAY = 3;    // seconds the stack stays closed before it opens
     let order = cards.slice(); // order[0] is the front card
     let isDeckOpen = false;
     let isDeckBusy = false;
@@ -473,11 +473,8 @@
     });
 
     stack();
-    if (reduceMotion()) {
-      open();
-    } else {
-      gsap.delayedCall(OPEN_DELAY, open);
-    }
+    deckControls = { isClosed: () => !opened, open };
+    if (reduceMotion()) open(); // otherwise the first scroll from the hero opens it
   }
 
   /* ---------- Section transitions: wipe out, jump, wipe in ---------- */
@@ -566,6 +563,15 @@
     });
   };
 
+  // A downward move from the hero first opens the preview deck; the next move goes to the next section
+  const navigate = (direction, fromWheel = false) => {
+    if (direction > 0 && deckControls && deckControls.isClosed()) {
+      deckControls.open();
+      return;
+    }
+    goToSection(direction, fromWheel);
+  };
+
   const sectionScrollEnabled = () =>
     !reduceMotion() && window.matchMedia("(hover: hover) and (pointer: fine)").matches && !lightboxEl.open;
 
@@ -598,7 +604,7 @@
     if (e.target.closest("textarea, select, #contactForm")) return;
     if (e.deltaY === 0 || pinnedCanScroll(Math.sign(e.deltaY))) return; // trackpads send tiny deltas too
     e.preventDefault();
-    goToSection(Math.sign(e.deltaY), true);
+    navigate(Math.sign(e.deltaY), true);
   }, { passive: false });
 
   window.addEventListener("keydown", (e) => {
@@ -611,7 +617,7 @@
     const direction = down ? 1 : -1;
     // Inside the pinned services: first press reads the track to its end, next press leaves the section
     if (pinnedCanScroll(direction)) scrollPinnedTo(direction);
-    else goToSection(direction);
+    else navigate(direction);
   });
 
   /* ---------- Section-by-section swipes (touch screens) ---------- */
@@ -624,13 +630,19 @@
   window.addEventListener("touchstart", (e) => {
     swipeStartY = null;
     if (!touchSectionsEnabled() || e.touches.length !== 1) return;
-    if (e.target.closest("input, textarea, select, [contenteditable], #contactForm, .services__track")) return;
+    if (e.target.closest("input, textarea, select, [contenteditable], #contactForm")) return;
     swipeStartX = e.touches[0].clientX;
     swipeStartY = e.touches[0].clientY;
   }, { passive: true });
 
+  let swipeAxis = null;
   window.addEventListener("touchmove", (e) => {
-    if (swipeStartY !== null) e.preventDefault(); // we move the page ourselves on release
+    if (swipeStartY === null) return;
+    const dx = Math.abs(swipeStartX - e.touches[0].clientX);
+    const dy = Math.abs(swipeStartY - e.touches[0].clientY);
+    if (!swipeAxis && Math.max(dx, dy) > 8) swipeAxis = dy > dx ? "vertical" : "horizontal";
+    if (swipeAxis === "horizontal") { swipeStartY = null; return; } // the services track scrolls natively
+    if (swipeAxis === "vertical") e.preventDefault(); // we move the page ourselves on release
   }, { passive: false });
 
   window.addEventListener("touchend", (e) => {
@@ -638,8 +650,9 @@
     const dy = swipeStartY - e.changedTouches[0].clientY;
     const dx = swipeStartX - e.changedTouches[0].clientX;
     swipeStartY = null;
+    swipeAxis = null;
     if (Math.abs(dy) < 40 || Math.abs(dx) > Math.abs(dy)) return;
-    goToSection(dy > 0 ? 1 : -1);
+    navigate(dy > 0 ? 1 : -1);
   });
 
   /* ---------- Contact form ---------- */
