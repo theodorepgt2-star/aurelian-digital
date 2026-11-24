@@ -432,7 +432,7 @@ a { color: inherit; }
   position: absolute; top: 0.6rem; right: 0.8rem;
   font: inherit; font-size: 2rem; line-height: 1;
   background: none; border: none; color: var(--mint); cursor: pointer;
-  padding: 0.2rem 0.5rem;
+  padding: 0.2rem 0.5rem; min-width: 44px; min-height: 44px;
 }
 .lightbox[open] { animation: lbIn var(--motion-300) var(--ease-out); }
 @keyframes lbIn { from { opacity: 0; transform: translateY(16px) scale(0.98); } }
