@@ -607,7 +607,7 @@
       onComplete: () => {
         wheelBusy = false;
         cooldownUntil = performance.now() + 700; // absorbs trackpad inertia
-        if (!settleSection(target)) releaseLock();
+        if (!(direction > 0 && settleSection(target))) releaseLock(); // only when moving down
       },
     });
   };
