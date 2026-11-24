@@ -400,7 +400,7 @@
     const IMAGES = [{ src: "assets/previews/olga.jpg" }, { src: "" }, { src: "" }, { src: "" }, { src: "" }];
     const imageWidth = 300, imageHeight = 300, spacing = 3, speed = 7, direction = "right";
     const drag = true, sensitivity = 5, tilt = -7, perspective = 3000, cornerRadius = 22;
-    const innerDim = 3.5, background = "#000000";
+    const innerDim = 3.5, background = "transparent";
     const OPEN_DELAY = 3; // seconds before it opens by itself (desktop)
 
     const count = IMAGES.length;
