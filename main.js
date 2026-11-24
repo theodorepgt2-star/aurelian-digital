@@ -562,21 +562,29 @@
       onComplete: () => {
         wheelBusy = false;
         cooldownUntil = performance.now() + 700; // absorbs trackpad inertia
-        settleWhy(target);
+        settleSection(target);
       },
     });
   };
 
-  // On phones the "why" list can end below the fold, so after a short pause the page continues down to show it
-  const settleWhy = (target) => {
-    const why = document.getElementById("why");
-    if (!why || reduceMotion() || Math.abs(restingY(why) - target) > 2) return;
-    if (!window.matchMedia("(pointer: coarse)").matches) return;
-    const last = why.querySelector(".why__item:last-child");
+  // On phones, a section whose last item sits below the fold keeps going after a short pause, so every item shows
+  const SETTLE_SECTIONS = [
+    { id: "why", item: ".why__item" },
+    { id: "work", item: ".tile" },
+  ];
+  const settleSection = (target) => {
+    if (reduceMotion() || !window.matchMedia("(pointer: coarse)").matches) return;
+    const match = SETTLE_SECTIONS.find(({ id }) => {
+      const el = document.getElementById(id);
+      return el && Math.abs(restingY(el) - target) <= 2;
+    });
+    if (!match) return;
+    const items = document.querySelectorAll(`#${match.id} ${match.item}`);
+    const last = items[items.length - 1];
     if (!last) return;
     const need = last.getBoundingClientRect().bottom - window.innerHeight + 24;
     if (need <= 0) return;
-    gsap.delayedCall(1, () => {
+    gsap.delayedCall(0.6, () => {
       gsap.to(window, {
         scrollTo: { y: clampY(window.scrollY + need), autoKill: false },
         duration: 1.2, ease: "power2.inOut",
