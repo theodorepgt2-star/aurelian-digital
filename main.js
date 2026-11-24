@@ -685,6 +685,15 @@
     navigate(dy > 0 ? 1 : -1);
   });
 
+  /* ---------- Phones: the menu links belong to the hero only ---------- */
+  const heroEl = document.querySelector(".hero");
+  const syncHeroNav = () => {
+    const pastHero = heroEl && window.scrollY > heroEl.offsetHeight * 0.5;
+    document.body.classList.toggle("past-hero", Boolean(pastHero));
+  };
+  window.addEventListener("scroll", syncHeroNav, { passive: true });
+  syncHeroNav();
+
   /* ---------- Contact form ---------- */
   const form = document.getElementById("contactForm");
   const status = document.getElementById("formStatus");

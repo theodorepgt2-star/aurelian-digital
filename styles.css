@@ -699,3 +699,9 @@ a { color: inherit; }
   /* A vertical swipe that starts on the cards goes to the section move, not the native scroll */
   .services__track { touch-action: pan-x; }
 }
+
+/* Phones: the menu links stay in the hero and leave with it (class set by main.js) */
+@media (max-width: 760px) {
+  .site-header .nav { transition: opacity var(--motion-200) var(--ease-out); }
+  .past-hero .site-header .nav { opacity: 0; pointer-events: none; }
+}
