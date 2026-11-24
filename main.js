@@ -740,18 +740,6 @@
 
   let isSending = false;
 
-  // After a request is saved, the visitor can pick a time in the Google Calendar booking page
-  const BOOKING_URL = "https://calendar.app.google/S2soaUuppaTpV4Ly9";
-  function bookingLink() {
-    const link = document.createElement("a");
-    link.className = "btn btn--ghost btn--small";
-    link.href = BOOKING_URL;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent = "Κλείστε ραντεβού";
-    return link;
-  }
-
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
@@ -799,7 +787,6 @@
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       form.reset();
       showStatus(translate("form.ok"), false);
-      status.append(bookingLink());
     } catch (err) {
       showStatus(translate("form.err"), true);
       console.error(err);
