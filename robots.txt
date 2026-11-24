@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://theodorepgt2-star.github.io/sitemap.xml
