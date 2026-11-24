@@ -713,16 +713,20 @@
     if (e.target.closest("input, textarea, select, [contenteditable], #contactForm")) return;
     swipeStartX = e.touches[0].clientX;
     swipeStartY = e.touches[0].clientY;
+    swipeOnTrack = Boolean(e.target.closest(".services__track"));
+    swipeAxis = null;
   }, { passive: true });
 
   let swipeAxis = null;
+  let swipeOnTrack = false; // the touch began on the services cards, which scroll sideways on their own
   window.addEventListener("touchmove", (e) => {
     if (swipeStartY === null) return;
     const dx = Math.abs(swipeStartX - e.touches[0].clientX);
     const dy = Math.abs(swipeStartY - e.touches[0].clientY);
     if (!swipeAxis && Math.max(dx, dy) > 8) swipeAxis = dy > dx ? "vertical" : "horizontal";
-    if (swipeAxis === "horizontal") return; // the services track scrolls natively; touchend decides by the final displacement
-    if (swipeAxis === "vertical") e.preventDefault(); // we move the page ourselves on release
+    // Everywhere else the browser never scrolls the page itself: the move is ours, in both directions
+    if (!swipeOnTrack || swipeAxis === "vertical") e.preventDefault();
+    if (swipeAxis === "horizontal" && swipeOnTrack) return; // the cards scroll sideways natively
   }, { passive: false });
 
   window.addEventListener("touchcancel", () => {
