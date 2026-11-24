@@ -391,89 +391,77 @@
     if (e.target === lightbox) lightbox.close();
   });
 
-  /* ---------- Hero preview deck: a stack that opens into a fan ---------- */
-  let deckControls = null; // lets the first scroll from the hero open the deck
+  /* ---------- Hero preview carousel: a ring of previews that turns ---------- */
+  let deckControls = null; // lets the first scroll from the hero open the carousel
   const deck = document.getElementById("deck");
-  if (deck) {
-    const cards = [...deck.querySelectorAll(".deck__card")];
-    const dotsWrap = document.getElementById("deckDots");
-    const FIRST_GAP = 90;    // px from the front card to the second card
-    const FRONT_X = -50;     // px the front card moves to the left when the row opens
-    const OPEN_DELAY = 3;    // seconds the stack stays closed before it opens (desktop)
-    let order = cards.slice(); // order[0] is the front card
+  const ring = document.getElementById("ring");
+  if (deck && ring) {
+    const items = [...ring.children];
+    const count = items.length;
+    const OPEN_DELAY = 3;   // seconds before it opens by itself (desktop)
+    const AUTO_SPEED = 10;  // degrees per second while it is open and nobody drags it
+    let angle = 0;          // rotation of the ring, in degrees
+    let velocity = 0;       // degrees per second, kept after a flick
     let isDeckOpen = false;
-    let isDeckBusy = false;
+    let drag = null;        // holds the last pointer position while dragging
+    let last = 0;
 
-    cards.forEach(() => dotsWrap.appendChild(document.createElement("span")));
-    const dotEls = [...dotsWrap.children];
-
-    const markDots = () => {
-      const frontIndex = cards.indexOf(order[0]);
-      dotEls.forEach((dot, i) => dot.classList.toggle("is-active", i === frontIndex));
+    // Place the items on a circle that is wide enough for them not to overlap
+    const layout = () => {
+      const width = items[0].offsetWidth || 260;
+      const radius = (width * 1.15) / (2 * Math.sin(Math.PI / count));
+      items.forEach((item, i) => {
+        item.style.transform = `rotateY(${i * (360 / count)}deg) translateZ(${radius}px)`;
+      });
     };
 
-    // Slot 0: front card, moved left and on top.
-    // Slots 1..n-1: a straight row to the right, each one behind the previous.
-    // Each gap is half the previous one: front→2nd = FIRST_GAP, 2nd→3rd = FIRST_GAP/2, and so on.
-    const xFor = (k) => (k === 0 ? FRONT_X : FRONT_X + FIRST_GAP * (2 - Math.pow(0.5, k - 1)));
-    const slotFor = (k, n) => ({ x: xFor(k), z: k === 0 ? n : n - k });
+    const render = () => {
+      ring.style.transform = `rotateY(${angle}deg)`;
+    };
 
-    const place = (animate, delay = 0) => {
-      const n = order.length;
-      order.forEach((card, k) => {
-        const s = slotFor(k, n);
-        card.style.zIndex = s.z;
-        if (animate && !reduceMotion()) {
-          gsap.to(card, {
-            x: s.x, rotation: 0, opacity: 1,
-            duration: 0.9, ease: "power3.out", delay: delay + k * 0.08,
-          });
+    const frame = (now) => {
+      const dt = last ? Math.min((now - last) / 1000, 0.1) : 0;
+      last = now;
+      if (isDeckOpen && !drag) {
+        if (Math.abs(velocity) > 1) {
+          angle += velocity * dt;
+          velocity *= 0.94;
         } else {
-          gsap.set(card, { x: s.x, rotation: 0, opacity: 1 });
+          angle += AUTO_SPEED * dt;
         }
-      });
-      markDots();
+      }
+      render();
+      requestAnimationFrame(frame);
     };
 
-    // Closed stack: all cards on top of each other, pivoting from their bottom-left corner
-    const stack = () => {
-      cards.forEach((card, k) => {
-        gsap.set(card, { yPercent: -100, x: 0, rotation: 0, opacity: 1 });
-        card.style.zIndex = cards.length - k;
-      });
-      markDots();
-    };
+    deck.addEventListener("pointerdown", (e) => {
+      if (!isDeckOpen) return;
+      drag = { lastX: e.clientX };
+      velocity = 0;
+      deck.setPointerCapture?.(e.pointerId);
+    });
+    deck.addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.lastX;
+      drag.lastX = e.clientX;
+      angle += dx * 0.4;
+      velocity = dx * 0.4 * 60;
+    });
+    const endDrag = () => { drag = null; };
+    deck.addEventListener("pointerup", endDrag);
+    deck.addEventListener("pointercancel", endDrag);
 
     const open = () => {
+      if (isDeckOpen) return;
       isDeckOpen = true;
-      place(true);
+      deck.classList.add("is-open");
     };
 
-    // Clicking the front card sends it left and out, then it returns at the back of the fan
-    const advance = () => {
-      if (isDeckBusy || !isDeckOpen) return;
-      isDeckBusy = true;
-      const front = order[0];
-      gsap.to(front, {
-        x: "-=260", opacity: 0,
-        duration: reduceMotion() ? 0 : 0.55, ease: "power2.in",
-        onComplete: () => {
-          order.shift();
-          order.push(front);
-          gsap.set(front, { x: xFor(order.length - 1), opacity: 0 });
-          place(true);
-          isDeckBusy = false;
-        },
-      });
-    };
+    layout();
+    render();
+    window.addEventListener("resize", layout);
+    requestAnimationFrame(frame);
 
-    cards.forEach((card) => {
-      card.addEventListener("click", () => {
-        if (card === order[0]) advance();
-      });
-    });
-
-    stack();
     deckControls = { isClosed: () => !isDeckOpen, open };
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
     if (reduceMotion()) open();
