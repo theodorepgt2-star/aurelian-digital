@@ -747,6 +747,12 @@
     // Honeypot: bots fill hidden fields, humans do not.
     if (formData.get("website")) return;
 
+    // The visitor must accept the privacy policy before personal data is sent
+    if (!formData.get("consent")) {
+      showStatus("Για να στείλετε το αίτημα, χρειάζεται να συμφωνήσετε με την Πολιτική απορρήτου.", true);
+      return;
+    }
+
     const data = {
       name: String(formData.get("name") || ""),
       phone: String(formData.get("phone") || ""),

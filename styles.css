@@ -705,3 +705,18 @@ a { color: inherit; }
   .site-header .nav { transition: opacity var(--motion-200) var(--ease-out); }
   .past-hero .site-header .nav { opacity: 0; pointer-events: none; }
 }
+
+/* Consent line under the contact form */
+.form__consent { display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.95rem; color: var(--muted); }
+.form__consent input { width: 20px; height: 20px; margin-top: 0.15rem; accent-color: var(--jade); flex: 0 0 auto; }
+.form__consent a { color: var(--mint); }
+.footer__legal { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 0.75rem; }
+.footer__legal a { min-height: 44px; display: inline-flex; align-items: center; }
+
+/* Legal pages (privacy.html, legal.html) */
+.legal { max-width: 720px; margin: 0 auto; padding: 6rem 1.25rem 3rem; }
+.legal h1 { font-size: clamp(2rem, 4vw, 2.75rem); }
+.legal h2 { font-size: 1.35rem; margin-top: 2rem; }
+.legal p, .legal li { color: var(--muted); line-height: 1.7; }
+.legal a { color: var(--mint); }
+.legal .placeholder { color: var(--jade); }
