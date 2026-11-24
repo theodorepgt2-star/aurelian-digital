@@ -458,6 +458,12 @@
     let isDeckOpen = false;
     let dragging = null; // { x } while the pointer is down
 
+    // Turns on its own only while it is on screen, and never for reduced-motion visitors
+    let isOnScreen = true;
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([entry]) => { isOnScreen = entry.isIntersecting; }).observe(deck);
+    }
+
     const draw = (now) => {
       const dt = last ? (now - last) / 1000 : 0;
       last = now;
@@ -466,7 +472,7 @@
         if (Math.abs(vel) > 0.01) {
           rotY += vel * f;
           vel *= 0.94;
-        } else {
+        } else if (isOnScreen && !reduceMotion()) {
           rotY += degPerSec * f;
         }
       }
@@ -480,6 +486,7 @@
         root.setPointerCapture?.(e.pointerId);
         dragging = { x: e.clientX };
         vel = 0;
+        root.style.cursor = "grabbing";
       });
       root.addEventListener("pointermove", (e) => {
         if (!dragging) return;
@@ -489,7 +496,7 @@
         rotY += dx * k;
         vel = dx * k * 60;
       });
-      const endDrag = () => { dragging = null; };
+      const endDrag = () => { dragging = null; root.style.cursor = "grab"; };
       root.addEventListener("pointerup", endDrag);
       root.addEventListener("pointercancel", endDrag);
     }
