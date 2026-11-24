@@ -391,77 +391,113 @@
     if (e.target === lightbox) lightbox.close();
   });
 
-  /* ---------- Hero preview carousel: a ring of previews that turns ---------- */
+  /* ---------- Hero preview carousel: Originkit Round Carousel, ported to plain JS ---------- */
   let deckControls = null; // lets the first scroll from the hero open the carousel
   const deck = document.getElementById("deck");
-  const ring = document.getElementById("ring");
-  if (deck && ring) {
-    const items = [...ring.children];
-    const count = items.length;
-    const OPEN_DELAY = 3;   // seconds before it opens by itself (desktop)
-    const AUTO_SPEED = 10;  // degrees per second while it is open and nobody drags it
-    let angle = 0;          // rotation of the ring, in degrees
-    let velocity = 0;       // degrees per second, kept after a flick
-    let isDeckOpen = false;
-    let drag = null;        // holds the last pointer position while dragging
-    let last = 0;
+  const root = document.getElementById("rc");
+  if (deck && root) {
+    // Same defaults as the Originkit component
+    const IMAGES = [{ src: "assets/previews/olga.jpg" }, { src: "" }, { src: "" }, { src: "" }, { src: "" }];
+    const imageWidth = 300, imageHeight = 300, spacing = 3, speed = 7, direction = "right";
+    const drag = true, sensitivity = 5, tilt = -7, perspective = 3000, cornerRadius = 22;
+    const innerDim = 3.5, background = "#000000";
+    const OPEN_DELAY = 3; // seconds before it opens by itself (desktop)
 
-    // Place the items on a circle that is wide enough for them not to overlap
-    const layout = () => {
-      const width = items[0].offsetWidth || 260;
-      const radius = (width * 1.15) / (2 * Math.sin(Math.PI / count));
-      items.forEach((item, i) => {
-        item.style.transform = `rotateY(${i * (360 / count)}deg) translateZ(${radius}px)`;
+    const count = IMAGES.length;
+    const angle = 360 / count;
+    const factor = 1 + spacing * 0.15;
+    const radius = (imageWidth * factor) / (2 * Math.tan(Math.PI / count));
+    const degPerSec = speed * 6 * (direction === "left" ? -1 : 1);
+
+    Object.assign(root.style, {
+      width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+      overflow: "hidden", background, perspective: `${perspective}px`,
+      cursor: drag ? "grab" : "default", touchAction: "none",
+    });
+
+    const tiltEl = document.createElement("div");
+    Object.assign(tiltEl.style, { transformStyle: "preserve-3d", transform: `rotateX(${tilt}deg)` });
+    const ring = document.createElement("div");
+    Object.assign(ring.style, {
+      position: "relative", width: `${imageWidth}px`, height: `${imageHeight}px`, transformStyle: "preserve-3d",
+    });
+    tiltEl.appendChild(ring);
+    root.appendChild(tiltEl);
+
+    const faceBase = {
+      position: "absolute", inset: "0", borderRadius: `${cornerRadius}px`, overflow: "hidden",
+      backfaceVisibility: "hidden", backgroundSize: "cover", backgroundPosition: "center",
+    };
+    IMAGES.forEach((img, i) => {
+      const item = document.createElement("div");
+      Object.assign(item.style, {
+        position: "absolute", inset: "0", transform: `rotateY(${i * angle}deg) translateZ(${radius}px)`,
+        transformStyle: "preserve-3d",
       });
-    };
+      const front = document.createElement("div");
+      Object.assign(front.style, faceBase, {
+        backgroundColor: img.src ? "transparent" : "#222",
+        backgroundImage: img.src ? `url(${img.src})` : "",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
+      });
+      const back = document.createElement("div");
+      Object.assign(back.style, faceBase, {
+        transform: "rotateY(180deg)",
+        backgroundColor: img.src ? "transparent" : "#181818",
+        backgroundImage: img.src ? `url(${img.src})` : "",
+        filter: `brightness(${innerDim / 10})`,
+      });
+      item.append(front, back);
+      ring.appendChild(item);
+    });
 
-    const render = () => {
-      ring.style.transform = `rotateY(${angle}deg)`;
-    };
+    let rotY = 0;     // current rotation, degrees
+    let vel = 0;      // degrees per second, kept after a flick
+    let last = 0;
+    let isDeckOpen = false;
+    let dragging = null; // { x } while the pointer is down
 
-    const frame = (now) => {
-      const dt = last ? Math.min((now - last) / 1000, 0.1) : 0;
+    const draw = (now) => {
+      const dt = last ? (now - last) / 1000 : 0;
       last = now;
-      if (isDeckOpen && !drag) {
-        if (Math.abs(velocity) > 1) {
-          angle += velocity * dt;
-          velocity *= 0.94;
+      const f = Math.min(dt, 0.1);
+      if (!dragging) {
+        if (Math.abs(vel) > 0.01) {
+          rotY += vel * f;
+          vel *= 0.94;
         } else {
-          angle += AUTO_SPEED * dt;
+          rotY += degPerSec * f;
         }
       }
-      render();
-      requestAnimationFrame(frame);
+      ring.style.transform = `translateZ(${-radius}px) rotateY(${rotY}deg)`;
+      requestAnimationFrame(draw);
     };
+    requestAnimationFrame(draw);
 
-    deck.addEventListener("pointerdown", (e) => {
-      if (!isDeckOpen) return;
-      drag = { lastX: e.clientX };
-      velocity = 0;
-      deck.setPointerCapture?.(e.pointerId);
-    });
-    deck.addEventListener("pointermove", (e) => {
-      if (!drag) return;
-      const dx = e.clientX - drag.lastX;
-      drag.lastX = e.clientX;
-      angle += dx * 0.4;
-      velocity = dx * 0.4 * 60;
-    });
-    const endDrag = () => { drag = null; };
-    deck.addEventListener("pointerup", endDrag);
-    deck.addEventListener("pointercancel", endDrag);
+    if (drag) {
+      root.addEventListener("pointerdown", (e) => {
+        root.setPointerCapture?.(e.pointerId);
+        dragging = { x: e.clientX };
+        vel = 0;
+      });
+      root.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+        const dx = e.clientX - dragging.x;
+        dragging.x = e.clientX;
+        const k = 0.3 * sensitivity;
+        rotY += dx * k;
+        vel = dx * k * 60;
+      });
+      const endDrag = () => { dragging = null; };
+      root.addEventListener("pointerup", endDrag);
+      root.addEventListener("pointercancel", endDrag);
+    }
 
     const open = () => {
       if (isDeckOpen) return;
       isDeckOpen = true;
       deck.classList.add("is-open");
     };
-
-    layout();
-    render();
-    window.addEventListener("resize", layout);
-    requestAnimationFrame(frame);
-
     deckControls = { isClosed: () => !isDeckOpen, open };
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
     if (reduceMotion()) open();

@@ -721,3 +721,6 @@ a { color: inherit; }
 
 /* Inline field errors: one message per field, under the input */
 .field-error { display: block; margin-top: 0.25rem; font-size: 0.875rem; color: var(--error); }
+
+/* Preview carousel root fills the hero deck */
+#rc { width: 100%; height: 100%; }
