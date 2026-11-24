@@ -724,18 +724,26 @@
     }
   }
 
-  // Validate each field when the visitor leaves it; clear the error as soon as they edit it
+  // Validate each field when the visitor leaves it; the message names the fix, and clears as they edit
   const fieldRules = {
-    name: (v) => v.trim().length > 0,
-    phone: (v) => /^[+0-9 ()-]{8,40}$/.test(v.trim()),
+    name: { isValid: (v) => v.trim().length > 0, error: "Γράψτε το όνομά σας." },
+    phone: { isValid: (v) => /^[+0-9 ()-]{8,40}$/.test(v.trim()), error: "Γράψτε έναν αριθμό, π.χ. 210 1234567." },
   };
-  Object.entries(fieldRules).forEach(([name, isValid]) => {
+  Object.entries(fieldRules).forEach(([name, { isValid, error }]) => {
     const input = form.elements[name];
+    const message = document.getElementById(`${name}-error`);
+    message.textContent = error;
+    const clear = () => {
+      input.removeAttribute("aria-invalid");
+      message.hidden = true;
+    };
     input.addEventListener("blur", () => {
-      input.setAttribute("aria-invalid", isValid(input.value) ? "false" : "true");
+      const valid = isValid(input.value);
+      input.setAttribute("aria-invalid", valid ? "false" : "true");
+      message.hidden = valid;
     });
-    input.addEventListener("focus", () => input.removeAttribute("aria-invalid"));
-    input.addEventListener("input", () => input.removeAttribute("aria-invalid"));
+    input.addEventListener("focus", clear);
+    input.addEventListener("input", clear);
   });
 
   let isSending = false;

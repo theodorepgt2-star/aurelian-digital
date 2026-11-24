@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=36" />
+  <link rel="stylesheet" href="styles.css?v=37" />
   <script type="importmap">
     {
       "imports": {
@@ -236,10 +236,12 @@
       <form class="form" id="contactForm" novalidate>
         <div class="form__row">
           <label><span data-i18n="form.name">Όνομα</span>
-            <input name="name" type="text" required maxlength="120" autocomplete="name" />
+            <input name="name" type="text" required maxlength="120" autocomplete="name" aria-describedby="name-error" />
+            <span class="field-error" id="name-error" role="alert" hidden></span>
           </label>
           <label><span data-i18n="form.phone">Τηλέφωνο</span>
-            <input name="phone" type="tel" required maxlength="40" autocomplete="tel" />
+            <input name="phone" type="tel" inputmode="tel" required maxlength="40" autocomplete="tel" aria-describedby="phone-error" />
+            <span class="field-error" id="phone-error" role="alert" hidden></span>
           </label>
         </div>
         <div class="form__row">
