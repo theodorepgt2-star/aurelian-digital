@@ -397,8 +397,9 @@
   const root = document.getElementById("rc");
   if (deck && root) {
     // Same defaults as the Originkit component
-    const IMAGES = [{ src: "assets/previews/olga.jpg" }, { src: "" }, { src: "" }, { src: "" }, { src: "" }];
-    const imageWidth = 300, imageHeight = 300, spacing = 3, speed = 7, direction = "right";
+    const IMAGES = [{ src: "assets/previews/olga-app.jpg" }, { src: "" }, { src: "" }, { src: "" }, { src: "" }];
+    // The screenshot is 1080 x 2048, so the card keeps that proportion (220 x 417) and shows it whole
+    const imageWidth = 220, imageHeight = 417, spacing = 3, speed = 7, direction = "right";
     const drag = true, sensitivity = 5, tilt = -7, perspective = 3000, cornerRadius = 22;
     const innerDim = 3.5, background = "transparent";
     const OPEN_DELAY = 3; // seconds before it opens by itself (desktop)
@@ -426,7 +427,7 @@
 
     const faceBase = {
       position: "absolute", inset: "0", borderRadius: `${cornerRadius}px`, overflow: "hidden",
-      backfaceVisibility: "hidden", backgroundSize: "cover", backgroundPosition: "center",
+      backfaceVisibility: "hidden", backgroundSize: "contain", backgroundPosition: "center", backgroundRepeat: "no-repeat",
     };
     IMAGES.forEach((img, i) => {
       const item = document.createElement("div");
@@ -436,14 +437,14 @@
       });
       const front = document.createElement("div");
       Object.assign(front.style, faceBase, {
-        backgroundColor: img.src ? "transparent" : "#222",
+        backgroundColor: img.src ? "#0a0a24" : "#222",
         backgroundImage: img.src ? `url(${img.src})` : "",
         boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
       });
       const back = document.createElement("div");
       Object.assign(back.style, faceBase, {
         transform: "rotateY(180deg)",
-        backgroundColor: img.src ? "transparent" : "#181818",
+        backgroundColor: img.src ? "#0a0a24" : "#181818",
         backgroundImage: img.src ? `url(${img.src})` : "",
         filter: `brightness(${innerDim / 10})`,
       });
