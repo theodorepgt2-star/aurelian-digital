@@ -693,6 +693,19 @@
     navigate(dy > 0 ? 1 : -1);
   });
 
+  /* ---------- Google Calendar booking button ---------- */
+  // The scheduling script loads async, so the button is created once the page has loaded
+  window.addEventListener("load", () => {
+    const target = document.getElementById("booking-button");
+    if (!target || !window.calendar || !window.calendar.schedulingButton) return;
+    window.calendar.schedulingButton.load({
+      url: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0_e0uNFTAbUr3XrRqPqTqxk1m4JG9sMQ3VOlb85GshAM5j_XSaaDF4x1du8HiQpDwodR_C7urk?gv=true",
+      color: "#039BE5",
+      label: "Κλείστε ραντεβού",
+      target,
+    });
+  });
+
   /* ---------- Phones: the menu links belong to the hero only ---------- */
   const heroEl = document.querySelector(".hero");
   const syncHeroNav = () => {

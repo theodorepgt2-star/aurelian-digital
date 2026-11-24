@@ -720,3 +720,7 @@ a { color: inherit; }
 .legal p, .legal li { color: var(--muted); line-height: 1.7; }
 .legal a { color: var(--mint); }
 .legal .placeholder { color: var(--jade); }
+
+/* Booking: a second way to contact, under the form */
+.booking { margin-top: 2rem; display: grid; gap: 1rem; justify-items: start; }
+.booking__text { margin: 0; color: var(--muted); }
