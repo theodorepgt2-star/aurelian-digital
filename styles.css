@@ -386,8 +386,8 @@ a { color: inherit; }
   transition: transform var(--motion-300) var(--ease-out);
 }
 .tile__art--1 { background: var(--space-lift) url("assets/previews/olga.jpg") center / contain no-repeat; }
-.tile__art--2 { background: radial-gradient(120% 90% at 80% 20%, #c79bff 0%, #2a1a5e 50%, #05050f 100%); }
-.tile__art--3 { background: radial-gradient(120% 90% at 50% 100%, #aee9ff 0%, #13133a 60%, #05050f 100%); }
+.tile__art--2 { background: var(--space-lift); }
+.tile__art--3 { background: var(--space-lift); }
 .tile__meta {
   display: grid; gap: 0.5rem;
   padding: 1rem 1.5rem 1.5rem;
@@ -677,9 +677,7 @@ a { color: inherit; }
 /* Phones: the first move lifts the preview deck above a blurred hero (class added by main.js) */
 #deckScrim {
   position: fixed; inset: 0; z-index: 55;
-  background: rgb(var(--space-deep-rgb) / 0.6);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  background: rgb(var(--space-deep-rgb) / 0.82); /* solid scrim: no blur, the hero stays readable behind it */
   opacity: 0; pointer-events: none;
   transition: opacity var(--motion-300) var(--ease-out);
 }
