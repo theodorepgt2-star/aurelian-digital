@@ -391,77 +391,18 @@
     if (e.target === lightbox) lightbox.close();
   });
 
-  /* ---------- Hero preview carousel: a ring of previews that turns ---------- */
+  /* ---------- Hero preview carousel (React, mounted in #round-carousel) ---------- */
+  // The carousel itself is drawn by React; this only opens it: on desktop after a pause, on phones on the first move
   let deckControls = null; // lets the first scroll from the hero open the carousel
   const deck = document.getElementById("deck");
-  const ring = document.getElementById("ring");
-  if (deck && ring) {
-    const items = [...ring.children];
-    const count = items.length;
-    const OPEN_DELAY = 3;   // seconds before it opens by itself (desktop)
-    const AUTO_SPEED = 10;  // degrees per second while it is open and nobody drags it
-    let angle = 0;          // rotation of the ring, in degrees
-    let velocity = 0;       // degrees per second, kept after a flick
+  if (deck) {
+    const OPEN_DELAY = 3; // seconds before it opens by itself (desktop)
     let isDeckOpen = false;
-    let drag = null;        // holds the last pointer position while dragging
-    let last = 0;
-
-    // Place the items on a circle that is wide enough for them not to overlap
-    const layout = () => {
-      const width = items[0].offsetWidth || 260;
-      const radius = (width * 1.15) / (2 * Math.sin(Math.PI / count));
-      items.forEach((item, i) => {
-        item.style.transform = `rotateY(${i * (360 / count)}deg) translateZ(${radius}px)`;
-      });
-    };
-
-    const render = () => {
-      ring.style.transform = `rotateY(${angle}deg)`;
-    };
-
-    const frame = (now) => {
-      const dt = last ? Math.min((now - last) / 1000, 0.1) : 0;
-      last = now;
-      if (isDeckOpen && !drag) {
-        if (Math.abs(velocity) > 1) {
-          angle += velocity * dt;
-          velocity *= 0.94;
-        } else {
-          angle += AUTO_SPEED * dt;
-        }
-      }
-      render();
-      requestAnimationFrame(frame);
-    };
-
-    deck.addEventListener("pointerdown", (e) => {
-      if (!isDeckOpen) return;
-      drag = { lastX: e.clientX };
-      velocity = 0;
-      deck.setPointerCapture?.(e.pointerId);
-    });
-    deck.addEventListener("pointermove", (e) => {
-      if (!drag) return;
-      const dx = e.clientX - drag.lastX;
-      drag.lastX = e.clientX;
-      angle += dx * 0.4;
-      velocity = dx * 0.4 * 60;
-    });
-    const endDrag = () => { drag = null; };
-    deck.addEventListener("pointerup", endDrag);
-    deck.addEventListener("pointercancel", endDrag);
-
     const open = () => {
       if (isDeckOpen) return;
       isDeckOpen = true;
       deck.classList.add("is-open");
     };
-
-    layout();
-    render();
-    window.addEventListener("resize", layout);
-    requestAnimationFrame(frame);
-
     deckControls = { isClosed: () => !isDeckOpen, open };
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
     if (reduceMotion()) open();

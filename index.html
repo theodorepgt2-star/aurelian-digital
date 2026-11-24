@@ -79,16 +79,9 @@
           <a class="btn btn--ghost" href="#services" data-i18n="hero.cta2">Δείτε τις υπηρεσίες</a>
         </div>
       </div>
-      <!-- Preview carousel: a ring of previews, drag to turn it -->
+      <!-- Preview carousel: drawn by React (src/mount.tsx), mounted here -->
       <div class="deck" id="deck">
-        <div class="ring" id="ring">
-          <figure class="ring__item" aria-label="Olga's Nails">
-            <img src="assets/previews/olga.jpg" alt="Προεπισκόπηση ιστοσελίδας salon νυχιών" onerror="this.remove()" />
-            <figcaption>Olga's Nails</figcaption>
-          </figure>
-          <figure class="ring__item ring__item--soon" aria-label="Σύντομα"><span>Σύντομα</span></figure>
-          <figure class="ring__item ring__item--soon" aria-label="Σύντομα"><span>Σύντομα</span></figure>
-        </div>
+        <div id="round-carousel"></div>
       </div>
 
       <a class="scroll-cue" href="#services" aria-label="Κάντε κύλιση">
@@ -291,6 +284,6 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollToPlugin.min.js"></script>
   <script src="config.js?v=3"></script>
   <script src="main.js?v=30"></script>
-  <script type="module" src="starfield.js?v=3"></script>
+  <script type="module" src="/src/mount.tsx"></script>
 </body>
 </html>
