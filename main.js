@@ -573,7 +573,17 @@
 
   // Keys always retarget from the current position, so a press during a move is never lost.
   // The wheel is throttled instead, because trackpad inertia sends many events in a row.
+  // One gesture, one move: while a move runs (and until the page has settled), new input is ignored
+  let moveLock = false;
+  let lockWatchdog = null;
+  const releaseLock = () => {
+    if (lockWatchdog) lockWatchdog.kill();
+    lockWatchdog = null;
+    gsap.delayedCall(0.25, () => { moveLock = false; });
+  };
+
   const goToSection = (direction, fromWheel = false) => {
+    if (moveLock) return;
     if (fromWheel && (wheelBusy || performance.now() < cooldownUntil)) return;
 
     const sections = [...document.querySelectorAll(SECTION_SELECTOR)];
@@ -586,6 +596,9 @@
     if (target === undefined || Math.abs(target - y) < 2) return;
 
     gsap.killTweensOf(window);
+    moveLock = true;
+    // Safety net: if the tween is interrupted, the lock still opens
+    lockWatchdog = gsap.delayedCall(4, () => { moveLock = false; lockWatchdog = null; });
     wheelBusy = true;
     gsap.to(window, {
       scrollTo: { y: target, autoKill: false },
@@ -594,7 +607,7 @@
       onComplete: () => {
         wheelBusy = false;
         cooldownUntil = performance.now() + 700; // absorbs trackpad inertia
-        settleSection(target);
+        if (!settleSection(target)) releaseLock();
       },
     });
   };
@@ -605,23 +618,25 @@
     { id: "work", item: ".tile" },
   ];
   const settleSection = (target) => {
-    if (reduceMotion() || !window.matchMedia("(pointer: coarse)").matches) return;
+    if (reduceMotion() || !window.matchMedia("(pointer: coarse)").matches) return false;
     const match = SETTLE_SECTIONS.find(({ id }) => {
       const el = document.getElementById(id);
       return el && Math.abs(restingY(el) - target) <= 2;
     });
-    if (!match) return;
+    if (!match) return false;
     const items = document.querySelectorAll(`#${match.id} ${match.item}`);
     const last = items[items.length - 1];
-    if (!last) return;
+    if (!last) return false;
     const need = last.getBoundingClientRect().bottom - window.innerHeight + 24;
-    if (need <= 0) return;
+    if (need <= 0) return false;
     gsap.delayedCall(0.6, () => {
       gsap.to(window, {
         scrollTo: { y: clampY(window.scrollY + need), autoKill: false },
         duration: 1.2, ease: "power2.inOut",
+        onComplete: releaseLock,
       });
     });
+    return true; // the lock stays until this scroll lands
   };
 
   // A downward move from the hero first opens the preview deck; the next move goes to the next section
